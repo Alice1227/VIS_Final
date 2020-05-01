@@ -1,3 +1,6 @@
+//因為一次十年node實在太多，先限定一年
+data=data.filter((item, index, array) => item.year == 2010);
+
 for (let d of data) {
   d.id = d.drama;
   d.casts = d.casts.split(",");
@@ -13,7 +16,7 @@ for (let d of data) {
         id: c
       }
       casts.push(obj);
-      $("body").append(c);
+      //$("body").append(c);
     }
   }
 }
