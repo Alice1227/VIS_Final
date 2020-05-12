@@ -1,38 +1,38 @@
+// split casts into array
 for (let d of data) {
   d.id = d.drama;
   d.casts = d.casts.split(",");
 }
 console.log(data);
 
+// get unique casts
 let casts = [];
-
 for (let d of data) {
-  for (let c of d.casts) {
-    if (casts.indexOf(c) == -1) {
+  for (let cast of d.casts) {
+    if (casts.indexOf(cast) == -1) {
       let obj = {
-        id: c
-      }
+        id: cast
+      };
       casts.push(obj);
-      $("body").append(c);
     }
   }
 }
 console.log(casts);
 
-function link(source, target) {
-  this.source = source;
-  this.target = target;
-}
-
+// setup links
 let links = [];
 for (let d of data) {
-  for (let c of d.casts) {
-    links.push(new link(d.drama, c));
+  for (let cast of d.casts) {
+    let obj = {
+      source: d.drama,
+      target: cast
+    };
+    links.push(obj);
   }
 }
-
 console.log(links);
 
+// setup nodes
 let nodes = [];
 nodes = data.concat(casts);
 console.log(nodes);
