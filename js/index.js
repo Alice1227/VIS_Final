@@ -1,3 +1,7 @@
+
+//因為一次十年node實在太多，先限定一年
+data=data.filter((item, index, array) => item.year == 2010);
+
 // split casts into array
 for (let d of data) {
   d.id = d.drama;
