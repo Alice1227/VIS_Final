@@ -47,12 +47,17 @@ circles.filter(function(d) {
   .attr("r", function(d) {
     return d.average
   })
-  .attr("fill", "#f4a540");
+  .attr("fill", "#fdb35d");
 circles.filter(function(d) {
-    return d.drama == null
+    return d.cast != null
   })
   .attr("r", 5)
-  .attr("fill", "#78b5f8");
+  .attr("fill", "#a4d9d6");
+circles.filter(function(d) {
+    return (d.drama == null) && (d.cast == null)
+  })
+  .attr("r", 25)
+  .attr("fill", "#e25a53");
 circles.call(d3.drag()
   .on("start", dragstarted)
   .on("drag", dragged)
