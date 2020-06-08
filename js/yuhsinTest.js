@@ -20,7 +20,12 @@ var simulation = d3.forceSimulation(node)
   .force("link", d3.forceLink(link).id(function(d) {
     return d.id;
   }))
+  // 在 y軸 方向上施加一個力把整個圖形壓扁一點
+  .force('yt', d3.forceY().strength(() => 0.025)) 
+  .force('yb', d3.forceY(height).strength(() => 0.025))
   .force("charge", d3.forceManyBody())
+  // 避免節點相互覆蓋
+  //.force('collision', d3.forceCollide().radius(d => 4))
   .force("center", d3.forceCenter(width / 2, height / 2));
 
 //繪製線、點、文字
