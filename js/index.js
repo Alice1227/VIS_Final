@@ -43,7 +43,6 @@ var sliderRange = d3
 
 //因為一次十年node實在太多，先限定
 data = data.filter((item, index, array) => (item.year >= 2010) && (item.year <= 2011));
-console.log(data)
 
 //get unique years
 let years = [];
@@ -64,7 +63,16 @@ for (let d of data) {
   d.id = d.drama;
   d.casts = d.casts.split(",");
 }
-console.log("data", data);
+
+// let drama data be sorted by descending of average
+data = data.sort(function (a,b){
+  return a.average < b.average ? 1:-1;
+})
+console.log("data sorted by average:", data);
+
+//define the max ratings for the years nodes' adius
+let maxRatings=data[0].average;
+console.log(maxRatings);
 
 // get unique casts
 let casts = [];

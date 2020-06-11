@@ -25,7 +25,7 @@ var simulation = d3.forceSimulation(node)
   .force('yb', d3.forceY(height).strength(() => 0.025))
   .force("charge", d3.forceManyBody())
   // 避免節點相互覆蓋
-  //.force('collision', d3.forceCollide().radius(d => 4))
+  // .force('collision', d3.forceCollide().radius(d => maxRatings/2))
   .force("center", d3.forceCenter(width / 2, height / 2));
 
 //繪製線、點、文字
@@ -35,7 +35,7 @@ var link = svg.append("g")
   .data(links)
   .enter().append("line")
   .attr("stroke-width", function(d) {
-    return 5;
+    return 1;
   })
   .attr("stroke", "#999");
 
@@ -45,6 +45,7 @@ var node = svg.append("g")
   .data(nodes)
   .enter().append("g");
 
+//circle for drama
 var circles = node.append("circle")
 circles.filter(function(d) {
     return d.drama != null
@@ -53,16 +54,21 @@ circles.filter(function(d) {
     return d.average
   })
   .attr("fill", "#fdb35d");
+
+//circle for casts
 circles.filter(function(d) {
     return d.cast != null
   })
   .attr("r", 5)
   .attr("fill", "#a4d9d6");
+
+//circle for years
 circles.filter(function(d) {
     return (d.drama == null) && (d.cast == null)
   })
-  .attr("r", 25)
+  .attr("r", maxRatings+5)
   .attr("fill", "#e25a53");
+  
 circles.call(d3.drag()
   .on("start", dragstarted)
   .on("drag", dragged)
