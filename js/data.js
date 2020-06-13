@@ -1,4 +1,4 @@
-let data = [{
+let dataOriginal = [{
     "year": 2010,
     "drama": "麵包王金卓求",
     "average": 38.61,

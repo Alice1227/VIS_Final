@@ -1,3 +1,9 @@
+// split casts into array
+for (let d of dataOriginal) {
+  d.id = d.drama;
+  d.casts = d.casts.split(",");
+}
+
 //range slider of years
 var data_year = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019];
 var sliderRange = d3
@@ -12,15 +18,9 @@ var sliderRange = d3
     .fill('#2196f3')
     .on('onchange', val => {
       d3.select('p#value-range').text(val.map(d3.format('.0f')).join('-'));
-      
-      //想要直接抓到兩個值，但是現在都format失敗
-      // for (let d of val){
-        
-      //   d3.format('.0r')(d);
-      //   console.log(d);
-      // }
-
-      console.log(val);
+      val=val.map(d3.format('.0f'));
+      setUpData(val[0],val[1]);
+      // console.log(val);
     });
 
   var gRange = d3
@@ -40,80 +40,81 @@ var sliderRange = d3
       .join('-')
   );
 
+setUpData(2010,2011);
 
-//因為一次十年node實在太多，先限定
-data = data.filter((item, index, array) => (item.year >= 2010) && (item.year <= 2011));
+function setUpData(startYear,endYear){
+  console.log(startYear+","+endYear);
 
-//get unique years
-let years = [];
-let uniqueYears = [];
-for (let d of data){
-  if (uniqueYears.indexOf(d.year.toString()) == -1) {
-    let obj = {
-      id: d.year
-    };
-    years.push(obj);
-    uniqueYears.push(d.year.toString());
-  }
-}
-console.log("years: ", years);
+  //因為一次十年node實在太多，先限定
+  data = dataOriginal.filter((item, index, array) => (item.year >= startYear) && (item.year <= endYear));
 
-// split casts into array
-for (let d of data) {
-  d.id = d.drama;
-  d.casts = d.casts.split(",");
-}
-
-// let drama data be sorted by descending of average
-data = data.sort(function (a,b){
-  return a.average < b.average ? 1:-1;
-})
-console.log("data sorted by average:", data);
-
-//define the max ratings for the years nodes' adius
-let maxRatings=data[0].average;
-console.log(maxRatings);
-
-// get unique casts
-let casts = [];
-let uniqueCasts = [];
-for (let d of data) {
-  for (let cast of d.casts) {
-    if (uniqueCasts.indexOf(cast) == -1) {
+  //get unique years
+  let years = [];
+  let uniqueYears = [];
+  for (let d of data){
+    if (uniqueYears.indexOf(d.year.toString()) == -1) {
       let obj = {
-        id: cast,
-        cast: cast
+        id: d.year
       };
-      casts.push(obj);
-      uniqueCasts.push(cast);
-      //casts.push(cast);
+      years.push(obj);
+      uniqueYears.push(d.year.toString());
     }
   }
-}
-console.log("casts: ", casts);
+  console.log("years: ", years);
 
-// setup links
-let links = [];
-for (let d of data) {
-  //for years and dramas
-  let obj = {
-    source: d.year.toString(),
-    target: d.drama
-  };
-  links.push(obj);
+  
 
-  //for dramas and casts
-  for (let cast of d.casts) {
+  // let drama data be sorted by descending of average
+  data = data.sort(function (a,b){
+    return a.average < b.average ? 1:-1;
+  })
+  console.log("data sorted by average:", data);
+
+  //define the max ratings for the years nodes' adius
+  maxRatings=data[0].average;
+  console.log(maxRatings);
+
+  // get unique casts
+  let casts = [];
+  let uniqueCasts = [];
+  for (let d of data) {
+    for (let cast of d.casts) {
+      if (uniqueCasts.indexOf(cast) == -1) {
+        let obj = {
+          id: cast,
+          cast: cast
+        };
+        casts.push(obj);
+        uniqueCasts.push(cast);
+        //casts.push(cast);
+      }
+    }
+  }
+  console.log("casts: ", casts);
+
+  // setup links
+  links = [];
+  for (let d of data) {
+    //for years and dramas
     let obj = {
-      source: d.drama,
-      target: cast
+      source: d.year.toString(),
+      target: d.drama
     };
     links.push(obj);
-  }
-}
-console.log("links: ", links);
 
-// setup nodes
-let nodes = [];
-nodes = (years.concat(data)).concat(casts);
-console.log("nodes: ", nodes);
+    //for dramas and casts
+    for (let cast of d.casts) {
+      let obj = {
+        source: d.drama,
+        target: cast
+      };
+      links.push(obj);
+    }
+  }
+  console.log("links: ", links);
+
+  // setup nodes
+  nodes = [];
+  nodes = (years.concat(data)).concat(casts);
+  console.log("nodes: ", nodes);
+}
