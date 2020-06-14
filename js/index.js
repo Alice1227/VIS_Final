@@ -45,13 +45,8 @@ function setUpData(startYear, endYear) {
   }
   console.log("years: ", years);
 
-
-
-  // let drama data be sorted by descending of average
-  data = data.sort(function(a, b) {
-    return a.average < b.average ? 1 : -1;
-  })
-  console.log("data sorted by average:", data);
+  // var current_ratings = document.getElementsByClassName("btn btn-secondary active");
+  dataSorting("average");
 
   //define the max ratings for the years nodes' adius
   maxRatings = data[0].average;
@@ -99,5 +94,26 @@ function setUpData(startYear, endYear) {
   // setup nodes
   nodes = [];
   nodes = (years.concat(data)).concat(casts);
-  //console.log("nodes: ", nodes);
+  console.log("nodes: ", nodes);
+}
+
+function dataSorting(ratings){
+  if(ratings == "average"){
+    data = data.sort(function(a, b) {
+      return a.average < b.average ? 1 : -1;
+    })
+    console.log("data sorted by average:", data);
+  }else if(ratings == "first"){
+    data = data.sort(function(a, b) {
+      return a.first < b.first ? 1 : -1;
+    })
+    console.log("data sorted by fisrt:", data);
+  }else{
+    data = data.sort(function(a, b) {
+      return a.last < b.last ? 1 : -1;
+    })
+    console.log("data sorted by last:", data);
+  }
+  // let drama data be sorted by descending of average
+  
 }
