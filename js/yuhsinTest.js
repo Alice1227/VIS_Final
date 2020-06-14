@@ -1,6 +1,6 @@
-let width = $(window).width();
+let width = $(window).width() - 30;
 let height = $(window).height();
-var svg = d3.select("svg").attr("width", width).attr("height", height);
+var svg = d3.select("#chart svg").attr("width", width).attr("height", height);
 console.log(width, height);
 
 //根據篩選出的data繪製network圖形
@@ -37,17 +37,19 @@ function setGraph() {
     .data(nodes)
     .enter().append("g");
 
+  let colors = d3.scaleOrdinal(d3.schemePaired);
 
-  var circles = node.append("circle")
+  var circles = node.append("g");
   //circle for drama
   circles.filter(function(d) {
       return d.drama != null
     })
+    .attr("class", "drama-node")
+    .append("circle")
     .attr("r", function(d) {
       return d.average
     })
-    .attr("fill", "#fdb35d");
-  //console.log(links);
+    .attr("fill", d => colors(d.year));
 
   //建立每個演員於link出現次數 By益菕
   let cs = [];
@@ -80,6 +82,8 @@ function setGraph() {
   circles.filter(function(d) {
       return d.cast != null
     })
+    .attr("class", "cast-node")
+    .append("circle")
     .attr("r", (d, i) => {
       let c = 0;
       let r = 2;
@@ -96,14 +100,26 @@ function setGraph() {
       console.log(d, r);
       return r;
     })
-    .attr("fill", "#a4d9d6");
+    .attr("fill", "#e25a53");
 
   //circle for years
   circles.filter(function(d) {
       return (d.drama == null) && (d.cast == null)
     })
+    .attr("class", "year-node")
+    .append("circle")
     .attr("r", maxRatings + 5)
-    .attr("fill", "#e25a53");
+    .attr("fill", "#fff")
+    .attr("stroke", d => colors(d.id))
+    .attr("stroke-width", 5);
+
+  d3.selectAll(".year-node")
+    .append("text")
+    .text(d => d.id)
+    .attr("fill", d => colors(d.id))
+    .attr("text-anchor", "middle")
+    .attr("y", 5)
+    .style("font-weight", "bold");
 
   circles.call(d3.drag()
     .on("start", dragstarted)
