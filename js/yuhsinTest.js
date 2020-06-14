@@ -5,7 +5,7 @@ let svg = d3.select("#networkChart svg").attr("width", width).attr("height", hei
 
 //根據篩選出的data繪製network圖形
 function setGraph() {
-  d3.selectAll("g").remove();
+  d3.selectAll("#networkChart svg g").remove();
 
   //繪製線、點、文字
   let link = svg.append("g")
