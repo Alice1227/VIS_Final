@@ -27,7 +27,7 @@ function setBarGraph(ratings) {
   for (i = 0; i < 5; i++) {
     data_five.push(data[i]);
   }
-  console.log(ratings, data_five);
+  // console.log(ratings, data_five);
 
   d3.selectAll("#barChart svg g").remove();
 

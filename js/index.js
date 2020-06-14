@@ -22,13 +22,14 @@ var mySlider = new rSlider({
     year_vals = vals.split(",");
     setUpData(year_vals[0], year_vals[1]);
     setGraph();
+    setBarGraph(current_ratings);
   }
 });
 
 setUpData(2010, 2011);
-setGraph();
 
 function setUpData(startYear, endYear) {
+  firstTime = true;
   // console.log("現在年份：" + startYear + "," + endYear);
 
   //因為一次十年node實在太多，先限定
