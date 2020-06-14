@@ -5,45 +5,28 @@ for (let d of dataOriginal) {
 }
 
 //range slider of years
-var data_year = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019];
-var sliderRange = d3
-  .sliderBottom()
-  .min(d3.min(data_year))
-  .max(d3.max(data_year))
-  .width(500)
-  .tickFormat(d3.format('.0f'))
-  .ticks(10)
-  .tickValues(data_year)
-  .default([2010, 2011])
-  .fill('#2196f3')
-  .on('onchange', val => {
-    d3.select('p#value-range').text(val.map(d3.format('.0f')).join('-'));
-    val = val.map(d3.format('.0f'));
-    setUpData(val[0], val[1]);
-    // console.log(val);
-  });
-
-var gRange = d3
-  .select('div#slider-range')
-  .append('svg')
-  .attr('width', 500)
-  .attr('height', 100)
-  .append('g')
-  .attr('transform', 'translate(30,30)');
-
-gRange.call(sliderRange);
-
-d3.select('p#value-range').text(
-  sliderRange
-  .value()
-  .map(d3.format('.0f'))
-  .join('-')
-);
+var mySlider = new rSlider({
+  target: '#slider',
+  values: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
+  range: true, // range slider
+  set:    [2010, 2011], // an array of preselected values
+  width:    800,
+  scale:    true,
+  labels:   true,
+  tooltip:  true,
+  step:     null, // step size
+  disabled: false, // is disabled?
+  onChange:  function (vals) {
+    year_vals=vals.split(",");
+    setUpData(year_vals[0],year_vals[1]);
+    setGraph();
+  }
+});
 
 setUpData(2011, 2012);
 
 function setUpData(startYear, endYear) {
-  console.log(startYear + "," + endYear);
+  console.log("現在年份："+startYear + "," + endYear);
 
   //因為一次十年node實在太多，先限定
   data = dataOriginal.filter((item, index, array) => (item.year >= startYear) && (item.year <= endYear));
