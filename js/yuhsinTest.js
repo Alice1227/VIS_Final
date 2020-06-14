@@ -13,11 +13,13 @@ function setGraph() {
       return d.id;
     }))
     // 在 y軸 方向上施加一個力把整個圖形壓扁一點
-    .force('xt', d3.forceY().strength(() => 0.04))
-    .force('xb', d3.forceY(height).strength(() => 0.04))
+    .force('xt', d3.forceX().strength(() => 0.02))
+    .force('xb', d3.forceX(width).strength(() => 0.02))
+    .force('yt', d3.forceY().strength(() => 0.04))
+    .force('yb', d3.forceY(height).strength(() => 0.04))
     .force("charge", d3.forceManyBody())
     // 避免節點相互覆蓋
-    // .force('collision', d3.forceCollide().radius(d => maxRatings/2))
+    // .force('collision', d3.forceCollide().radius(d => maxRatings / 2))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
   //繪製線、點、文字
