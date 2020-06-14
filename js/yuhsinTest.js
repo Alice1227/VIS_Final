@@ -6,6 +6,20 @@ let svg = d3.select("#networkChart svg").attr("width", width).attr("height", hei
 //根據篩選出的data繪製network圖形
 function setGraph() {
   d3.selectAll("g").remove();
+  let node = svg.append("g")
+    .attr("class", "nodes")
+    .selectAll("g")
+    .data(nodes)
+    .enter().append("g");
+  //繪製線、點、文字
+  let link = svg.append("g")
+    .attr("class", "links")
+    .selectAll("line")
+    .data(links)
+    .enter().append("line")
+    .attr("stroke-width", 1)
+    .attr("stroke-opacity", 0.3)
+    .attr("stroke", "#999");
   //Force-Directed graph 需要使用力模擬器forceSimulation，且每個模擬器要定義三個東西：
   //link連結的引力、charge點之間的引力、center引力的中心
   let simulation = d3.forceSimulation(node)
@@ -22,24 +36,7 @@ function setGraph() {
     // .force('collision', d3.forceCollide().radius(d => maxRatings / 2))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-  //繪製線、點、文字
-  let link = svg.append("g")
-    .attr("class", "links")
-    .selectAll("line")
-    .data(links)
-    .enter().append("line")
-    .attr("stroke-width", 1)
-    .attr("stroke-opacity", 0.3)
-    .attr("stroke", "#999");
-
-  let node = svg.append("g")
-    .attr("class", "nodes")
-    .selectAll("g")
-    .data(nodes)
-    .enter().append("g");
-
   let colors = d3.scaleOrdinal(d3.schemePaired);
-
   let circles = node.append("g");
   //circle for drama
   circles.filter(function(d) {
