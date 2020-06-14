@@ -1,6 +1,6 @@
-let width = $("#network").width();
+let width = $("#network-wrapper").width();
 let height = 600;
-let svg = d3.select("#chart svg").attr("width", width).attr("height", height);
+let svg = d3.select("#networkChart svg").attr("width", width).attr("height", height);
 // console.log(width, height);
 
 //根據篩選出的data繪製network圖形
@@ -254,46 +254,3 @@ function setGraph() {
     return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
   }
 }
-
-//Bar Chart
-//定義圖表左右距離與整體長寬
-var margin_bar = {
-  top: 10,
-  right: 10,
-  bottom: 10,
-  left: 10
-},
-width_bar = 200 - margin_bar.left - margin_bar.right,
-height_bar = 200 - margin_bar.top - margin_bar.bottom;
-
-var x = d3.scaleBand()
-.rangeRound([0, width_bar], .1);
-
-var y = d3.scaleLinear()
-.range([height_bar, 0]);
-
-var xAxis_bar = d3.axisBottom(x);
-
-var yAxis_bar = d3.axisLeft(y);
-
-var color = d3.scaleOrdinal()
-.range(["#DD84A1", "#FFBBBE", "#FEE698", "#CBE3B3", "#40DEF1"]);
-
-var svg = d3.select('#barChart').append("svg")
-.attr("width", width_bar + margin_bar.left + margin_bar.right)
-.attr("height", height_bar + margin_bar.top + margin_bar.bottom)
-.append("g")
-.attr("transform", "translate(" + margin_bar.left + "," + margin_bar.top + ")");
-
-
-function setBarGraph(ratings) {
-  dataSorting(ratings);
-  data_five = []
-  for (i = 0; i < 5; i++) {
-    data_five.push(data[i])
-  }
-  console.log(ratings, data_five);
-  
-}
-
-setBarGraph("average");
