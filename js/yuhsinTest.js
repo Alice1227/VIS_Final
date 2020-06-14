@@ -1,26 +1,11 @@
-let width = $("#network").width();
+let width = $("#network-wrapper").width();
 let height = 600;
-let svg = d3.select("#chart svg").attr("width", width).attr("height", height);
+let svg = d3.select("#networkChart svg").attr("width", width).attr("height", height);
 // console.log(width, height);
 
 //根據篩選出的data繪製network圖形
 function setGraph() {
   d3.selectAll("g").remove();
-  //Force-Directed graph 需要使用力模擬器forceSimulation，且每個模擬器要定義三個東西：
-  //link連結的引力、charge點之間的引力、center引力的中心
-  let simulation = d3.forceSimulation(node)
-    .force("link", d3.forceLink(link).id(function(d) {
-      return d.id;
-    }))
-    // 在 y軸 方向上施加一個力把整個圖形壓扁一點
-    .force('xt', d3.forceX().strength(() => 0.02))
-    .force('xb', d3.forceX(width).strength(() => 0.02))
-    .force('yt', d3.forceY().strength(() => 0.04))
-    .force('yb', d3.forceY(height).strength(() => 0.04))
-    .force("charge", d3.forceManyBody())
-    // 避免節點相互覆蓋
-    // .force('collision', d3.forceCollide().radius(d => maxRatings / 2))
-    .force("center", d3.forceCenter(width / 2, height / 2));
 
   //繪製線、點、文字
   let link = svg.append("g")
@@ -38,8 +23,23 @@ function setGraph() {
     .data(nodes)
     .enter().append("g");
 
-  let colors = d3.scaleOrdinal(d3.schemePaired);
+  //Force-Directed graph 需要使用力模擬器forceSimulation，且每個模擬器要定義三個東西：
+  //link連結的引力、charge點之間的引力、center引力的中心
+  let simulation = d3.forceSimulation(node)
+    .force("link", d3.forceLink(link).id(function(d) {
+      return d.id;
+    }))
+    // 在 x、y軸 方向上施加一個力把整個圖形壓扁一點
+    .force('xt', d3.forceX().strength(() => 0.02))
+    .force('xb', d3.forceX(width).strength(() => 0.02))
+    .force('yt', d3.forceY().strength(() => 0.04))
+    .force('yb', d3.forceY(height).strength(() => 0.04))
+    .force("charge", d3.forceManyBody())
+    // 避免節點相互覆蓋
+    // .force('collision', d3.forceCollide().radius(d => maxRatings / 2))
+    .force("center", d3.forceCenter(width / 2, height / 2));
 
+  let colors = d3.scaleOrdinal(d3.schemePaired);
   let circles = node.append("g");
   //circle for drama
   circles.filter(function(d) {
@@ -254,6 +254,7 @@ function setGraph() {
   function isConnected(a, b) {
     return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
   }
+<<<<<<< HEAD
 
   function showDetial(){
     console.log("hiiiii");
@@ -302,3 +303,6 @@ function setBarGraph(ratings) {
 }
 
 setBarGraph("average");
+=======
+}
+>>>>>>> a593707bef4c501f65113c67ea0ba584b21bb7e0

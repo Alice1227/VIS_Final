@@ -19,11 +19,11 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-9">
-        <div class="slider-wrapper">
+        <div id="slider-wrapper">
           <input type="text" id="slider" class="slider">
         </div>
-        <div id="network">
-          <div id="chart"><svg></svg></div>
+        <div id="network-wrapper">
+          <div id="networkChart"><svg></svg></div>
           <div class="tooltip"></div>
         </div>
       </div>
@@ -46,7 +46,9 @@
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">前五名</div>
-          <div class="panel-body"><div id="barChart"></div></div>
+          <div class="panel-body">
+            <div id="barChart"><svg></svg></div>
+          </div>
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">該node詳情</div>
