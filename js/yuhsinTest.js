@@ -11,6 +11,34 @@ var svg = d3.select("svg").attr("width", width).attr("height", height);
 // height = +svg.attr("height");
 console.log(width, height);
 
+//建立每個演員於link出現次數 By益菕
+let cs = [];
+let uc = [];
+var times = [];
+console.log(links);
+for (let i = 0; i < links.length; i++) {
+  console.log(links[i]["target"]);
+  cs.push(links[i].target);
+}
+console.log(cs);
+for (let i = 0; i < cs.length; i++) {
+  if (uc.indexOf(cs[i]) == -1) {
+    uc.push(cs[i]);
+    times.push({
+      cast: cs[i],
+      time: 1
+    });
+  } else {
+    for (let j = 0; j < times.length; j++) {
+      if (cs[i] == times[j].cast) {
+        times[j].time++;
+      }
+    }
+  }
+}
+console.log(uc);
+console.log(times);
+
 
 //var color = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -55,12 +83,26 @@ circles.filter(function(d) {
     return d.average
   })
   .attr("fill", "#fdb35d");
-
+//console.log(links);
 //circle for casts
 circles.filter(function(d) {
     return d.cast != null
   })
-  .attr("r", 5)
+  .attr("r", (d, i) => {
+    let c = 0;
+    let r = 2;
+    for (let a = 0; a < times.length; a++) {
+      // console.log(d["cast"]);
+      // console.log(times[a]["cast"]);
+      // console.log(times[a]["time"]);
+      if (d["cast"] === times[a]["cast"]) {
+        r = r + times[a]["time"] * 1.5;
+      }
+    }
+    //console.log(d);
+    //console.log(i);
+    return r;
+  })
   .attr("fill", "#a4d9d6");
 
 //circle for years
