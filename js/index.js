@@ -68,7 +68,7 @@ function setUpData(startYear, endYear) {
       }
     }
   }
-  console.log("casts: ", casts);
+  //console.log("casts: ", casts);
 
   // setup links
   links = [];
@@ -89,7 +89,7 @@ function setUpData(startYear, endYear) {
       links.push(obj);
     }
   }
-  console.log("links: ", links);
+  //console.log("links: ", links);
 
   // setup nodes
   nodes = [];
