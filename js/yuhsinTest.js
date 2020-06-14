@@ -45,8 +45,9 @@ var node = svg.append("g")
   .data(nodes)
   .enter().append("g");
 
-//circle for drama
+
 var circles = node.append("circle")
+//circle for drama
 circles.filter(function(d) {
     return d.drama != null
   })
@@ -74,12 +75,26 @@ circles.call(d3.drag()
   .on("drag", dragged)
   .on("end", dragended));
 
-// var lables = node.append("text")
-//   .text(function(d) {
-//     return d.id;
-//   })
-//   .attr('x', 6)
-//   .attr('y', 3);
+circles
+  .on('mouseover.fade', fade(0.1))
+  .on('mouseout.fade', fade(1));
+
+const textElems = svg.append('g')
+  .selectAll('text')
+  .data(nodes)
+  .join('text')
+    .text(d => d.id)
+    .attr('font-size',10)
+    .attr('font-size',10);
+
+textElems.call(d3.drag()
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended));
+
+textElems
+  .on('mouseover.fade', fade(0.1))
+  .on('mouseout.fade', fade(1));
 
 node.append("title")
   .text(function(d) {
@@ -128,6 +143,11 @@ function ticked() {
     .attr("transform", function(d) {
       return `translate(${d.x},${d.y})`;
     })
+
+  textElems
+    .attr("x", d => d.x + 10)
+    .attr("y", d => d.y)
+    .attr("visibility", "hidden");
 }
 
 //定義拖拉的動作，因為在拖拉的過程中，會中斷模擬器，所以利用restart來重啟
@@ -148,15 +168,25 @@ function dragended(d) {
   d.fy = null;
 }
 
-//但目前有bug顯示不出來
-var tool = d3.select(".tooltip");
-circles.filter(function(d) {
-  return d.drama != null
-}).on("mousemove", function(d) {
-  tool.style("left", d3.event.pageX + 10 + "px")
-  tool.style("top", d3.event.pageY - 20 + "px")
-  tool.style("display", "inline-block");
-  tool.html(d.drama + '<br>平均收視率:' + d.average)
-}).on("mouseout", function(d) {
-  tool.style("display", "none");
-});
+//滑鼠滑過時透明度
+function fade(opacity) {
+  return d => {
+    node.style('opacity', function (o) { return isConnected(d, o) ? 1 : opacity });
+    textElems.style('visibility', function (o) { return isConnected(d, o) ? "visible" : "hidden" });
+    link.style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
+    if(opacity === 1){
+      node.style('opacity', 1)
+      textElems.style('visibility', 'hidden')
+      link.style('stroke-opacity', 0.3)
+    }
+  }
+}
+
+const linkedByIndex = {};
+  links.forEach(d => {
+    linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+  });
+
+function isConnected(a, b) {
+  return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
+}
