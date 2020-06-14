@@ -3,34 +3,6 @@ let height = $(window).height();
 var svg = d3.select("svg").attr("width", width).attr("height", height);
 console.log(width, height);
 
-//建立每個演員於link出現次數 By益菕
-let cs = [];
-let uc = [];
-var times = [];
-console.log(links);
-for (let i = 0; i < links.length; i++) {
-  console.log(links[i]["target"]);
-  cs.push(links[i].target);
-}
-console.log(cs);
-for (let i = 0; i < cs.length; i++) {
-  if (uc.indexOf(cs[i]) == -1) {
-    uc.push(cs[i]);
-    times.push({
-      cast: cs[i],
-      time: 1
-    });
-  } else {
-    for (let j = 0; j < times.length; j++) {
-      if (cs[i] == times[j].cast) {
-        times[j].time++;
-      }
-    }
-  }
-}
-console.log(uc);
-console.log(times);
-
 //根據篩選出的data繪製network圖形
 function setGraph() {
   d3.selectAll("g").remove();
@@ -76,6 +48,34 @@ function setGraph() {
     })
     .attr("fill", "#fdb35d");
   //console.log(links);
+
+  //建立每個演員於link出現次數 By益菕
+  let cs = [];
+  let uc = [];
+  var times = [];
+  console.log(links);
+  for (let i = 0; i < links.length; i++) {
+    //console.log(links[i]["target"]);
+    cs.push(links[i].target);
+  }
+  console.log(cs);
+  for (let i = 0; i < cs.length; i++) {
+    if (uc.indexOf(cs[i]) == -1) {
+      uc.push(cs[i]);
+      times.push({
+        cast: cs[i],
+        time: 1
+      });
+    } else {
+      for (let j = 0; j < times.length; j++) {
+        if (cs[i] == times[j].cast) {
+          times[j].time++;
+        }
+      }
+    }
+  }
+  console.log(uc);
+  console.log(times);
   //circle for casts
   circles.filter(function(d) {
       return d.cast != null
@@ -93,6 +93,7 @@ function setGraph() {
       }
       //console.log(d);
       //console.log(i);
+      console.log(d, r);
       return r;
     })
     .attr("fill", "#a4d9d6");
