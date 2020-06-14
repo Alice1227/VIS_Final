@@ -100,7 +100,8 @@ function setGraph() {
       console.log(d, r);
       return r;
     })
-    .attr("fill", "#e25a53");
+    .attr("fill", "#eee")
+    .attr("stroke", "#888");
 
   //circle for years
   circles.filter(function(d) {
