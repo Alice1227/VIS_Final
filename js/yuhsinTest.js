@@ -1,5 +1,5 @@
-let width = $(window).width() - 30;
-let height = $(window).height();
+let width = $("#network").width();
+let height = 600;
 var svg = d3.select("#chart svg").attr("width", width).attr("height", height);
 console.log(width, height);
 
@@ -13,8 +13,8 @@ function setGraph() {
       return d.id;
     }))
     // 在 y軸 方向上施加一個力把整個圖形壓扁一點
-    .force('yt', d3.forceY().strength(() => 0.025))
-    .force('yb', d3.forceY(height).strength(() => 0.025))
+    .force('xt', d3.forceY().strength(() => 0.04))
+    .force('xb', d3.forceY(height).strength(() => 0.04))
     .force("charge", d3.forceManyBody())
     // 避免節點相互覆蓋
     // .force('collision', d3.forceCollide().radius(d => maxRatings/2))
@@ -26,9 +26,8 @@ function setGraph() {
     .selectAll("line")
     .data(links)
     .enter().append("line")
-    .attr("stroke-width", function(d) {
-      return 1;
-    })
+    .attr("stroke-width", 1)
+    .attr("stroke-opacity", 0.3)
     .attr("stroke", "#999");
 
   var node = svg.append("g")
@@ -42,12 +41,12 @@ function setGraph() {
   var circles = node.append("g");
   //circle for drama
   circles.filter(function(d) {
-      return d.drama != null
+      return d.drama != null;
     })
     .attr("class", "drama-node")
     .append("circle")
     .attr("r", function(d) {
-      return d.average
+      return d.average * 0.8;
     })
     .attr("fill", d => colors(d.year));
 
@@ -80,7 +79,7 @@ function setGraph() {
   console.log(times);
   //circle for casts
   circles.filter(function(d) {
-      return d.cast != null
+      return d.cast != null;
     })
     .attr("class", "cast-node")
     .append("circle")
@@ -105,11 +104,11 @@ function setGraph() {
 
   //circle for years
   circles.filter(function(d) {
-      return (d.drama == null) && (d.cast == null)
+      return (d.drama == null) && (d.cast == null);
     })
     .attr("class", "year-node")
     .append("circle")
-    .attr("r", maxRatings + 5)
+    .attr("r", maxRatings)
     .attr("fill", "#fff")
     .attr("stroke", d => colors(d.id))
     .attr("stroke-width", 5);
@@ -136,7 +135,6 @@ function setGraph() {
     .data(nodes)
     .join('text')
     .text(d => d.id)
-    .attr('font-size', 10)
     .attr('font-size', 10);
 
   textElems.call(d3.drag()
@@ -249,13 +247,13 @@ function setGraph() {
 }
 setGraph();
 
-function setBarGraph(ratings){
+function setBarGraph(ratings) {
   dataSorting(ratings);
-  data_five=[]
-  for( i=0; i<5; i++){
+  data_five = []
+  for (i = 0; i < 5; i++) {
     data_five.push(data[i])
   }
-  console.log(ratings,data_five);
+  console.log(ratings, data_five);
 }
 
 setBarGraph("average");

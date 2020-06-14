@@ -9,16 +9,16 @@ var mySlider = new rSlider({
   target: '#slider',
   values: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
   range: true, // range slider
-  set:    [2010, 2011], // an array of preselected values
-  width:    800,
-  scale:    true,
-  labels:   true,
-  tooltip:  true,
-  step:     null, // step size
+  set: [2010, 2011], // an array of preselected values
+  width: 800,
+  scale: true,
+  labels: true,
+  tooltip: true,
+  step: null, // step size
   disabled: false, // is disabled?
-  onChange:  function (vals) {
-    year_vals=vals.split(",");
-    setUpData(year_vals[0],year_vals[1]);
+  onChange: function(vals) {
+    year_vals = vals.split(",");
+    setUpData(year_vals[0], year_vals[1]);
     setGraph();
   }
 });
@@ -26,7 +26,7 @@ var mySlider = new rSlider({
 setUpData(2011, 2012);
 
 function setUpData(startYear, endYear) {
-  console.log("現在年份："+startYear + "," + endYear);
+  console.log("現在年份：" + startYear + "," + endYear);
 
   //因為一次十年node實在太多，先限定
   data = dataOriginal.filter((item, index, array) => (item.year >= startYear) && (item.year <= endYear));
@@ -97,23 +97,23 @@ function setUpData(startYear, endYear) {
   console.log("nodes: ", nodes);
 }
 
-function dataSorting(ratings){
-  if(ratings == "average"){
+function dataSorting(ratings) {
+  if (ratings == "average") {
     data = data.sort(function(a, b) {
       return a.average < b.average ? 1 : -1;
     })
     console.log("data sorted by average:", data);
-  }else if(ratings == "first"){
+  } else if (ratings == "first") {
     data = data.sort(function(a, b) {
       return a.first < b.first ? 1 : -1;
     })
     console.log("data sorted by fisrt:", data);
-  }else{
+  } else {
     data = data.sort(function(a, b) {
       return a.last < b.last ? 1 : -1;
     })
     console.log("data sorted by last:", data);
   }
   // let drama data be sorted by descending of average
-  
+
 }
