@@ -2,7 +2,7 @@ body {
   font-family: Microsoft JhengHei;
 }
 
-.slider-wrapper {
+#slider-wrapper {
   width: 100%;
   display: flex;
   justify-content: center;
