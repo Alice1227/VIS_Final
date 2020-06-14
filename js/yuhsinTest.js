@@ -1,14 +1,14 @@
 let width = $("#network").width();
 let height = 600;
-var svg = d3.select("#chart svg").attr("width", width).attr("height", height);
-console.log(width, height);
+let svg = d3.select("#chart svg").attr("width", width).attr("height", height);
+// console.log(width, height);
 
 //根據篩選出的data繪製network圖形
 function setGraph() {
   d3.selectAll("g").remove();
   //Force-Directed graph 需要使用力模擬器forceSimulation，且每個模擬器要定義三個東西：
   //link連結的引力、charge點之間的引力、center引力的中心
-  var simulation = d3.forceSimulation(node)
+  let simulation = d3.forceSimulation(node)
     .force("link", d3.forceLink(link).id(function(d) {
       return d.id;
     }))
@@ -23,7 +23,7 @@ function setGraph() {
     .force("center", d3.forceCenter(width / 2, height / 2));
 
   //繪製線、點、文字
-  var link = svg.append("g")
+  let link = svg.append("g")
     .attr("class", "links")
     .selectAll("line")
     .data(links)
@@ -32,7 +32,7 @@ function setGraph() {
     .attr("stroke-opacity", 0.3)
     .attr("stroke", "#999");
 
-  var node = svg.append("g")
+  let node = svg.append("g")
     .attr("class", "nodes")
     .selectAll("g")
     .data(nodes)
@@ -40,7 +40,7 @@ function setGraph() {
 
   let colors = d3.scaleOrdinal(d3.schemePaired);
 
-  var circles = node.append("g");
+  let circles = node.append("g");
   //circle for drama
   circles.filter(function(d) {
       return d.drama != null;
@@ -48,20 +48,26 @@ function setGraph() {
     .attr("class", "drama-node")
     .append("circle")
     .attr("r", function(d) {
-      return d.average * 0.8;
+      if (current_ratings == "average") {
+        return d.average * 0.8;
+      } else if (current_ratings == "first") {
+        return d.first * 0.8;
+      } else if (current_ratings == "last") {
+        return d.last * 0.8;
+      }
     })
     .attr("fill", d => colors(d.year));
 
   //建立每個演員於link出現次數 By益菕
   let cs = [];
   let uc = [];
-  var times = [];
-  console.log(links);
+  let times = [];
+  // console.log(links);
   for (let i = 0; i < links.length; i++) {
     //console.log(links[i]["target"]);
     cs.push(links[i].target);
   }
-  console.log(cs);
+  // console.log(cs);
   for (let i = 0; i < cs.length; i++) {
     if (uc.indexOf(cs[i]) == -1) {
       uc.push(cs[i]);
@@ -77,9 +83,10 @@ function setGraph() {
       }
     }
   }
-  console.log(uc);
-  console.log(times);
-  //circle for casts
+  // console.log(uc);
+  // console.log(times);
+
+  // circle for casts
   circles.filter(function(d) {
       return d.cast != null;
     })
@@ -96,9 +103,9 @@ function setGraph() {
           r = r + times[a]["time"] * 1.5;
         }
       }
-      //console.log(d);
-      //console.log(i);
-      console.log(d, r);
+      // console.log(d);
+      // console.log(i);
+      // console.log(d, r);
       return r;
     })
     .attr("fill", "#eee")
