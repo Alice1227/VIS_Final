@@ -1,22 +1,15 @@
 let width = $(window).width();
 let height = $(window).height();
-
-// let xScale = d3.scaleLinear()
-//   .range([0, width]);
-// let yScale = d3.scaleLinear()
-//   .range([0, height]);
 var svg = d3.select("svg").attr("width", width).attr("height", height);
-// .attr("viewBox", `0 0 ${width} ${height}`);
-// width = +svg.attr("width"),
-// height = +svg.attr("height");
 console.log(width, height);
 
+//根據篩選出的data繪製network圖形
+function setGraph(){
+  d3.selectAll("g").remove();
 
-//var color = d3.scaleOrdinal(d3.schemeCategory20);
-
-//Force-Directed graph 需要使用力模擬器forceSimulation，且每個模擬器要定義三個東西：
-//link連結的引力、charge點之間的引力、center引力的中心
-var simulation = d3.forceSimulation(node)
+  //Force-Directed graph 需要使用力模擬器forceSimulation，且每個模擬器要定義三個東西：
+  //link連結的引力、charge點之間的引力、center引力的中心
+  var simulation = d3.forceSimulation(node)
   .force("link", d3.forceLink(link).id(function(d) {
     return d.id;
   }))
@@ -28,8 +21,8 @@ var simulation = d3.forceSimulation(node)
   // .force('collision', d3.forceCollide().radius(d => maxRatings/2))
   .force("center", d3.forceCenter(width / 2, height / 2));
 
-//繪製線、點、文字
-var link = svg.append("g")
+  //繪製線、點、文字
+  var link = svg.append("g")
   .attr("class", "links")
   .selectAll("line")
   .data(links)
@@ -39,16 +32,16 @@ var link = svg.append("g")
   })
   .attr("stroke", "#999");
 
-var node = svg.append("g")
+  var node = svg.append("g")
   .attr("class", "nodes")
   .selectAll("g")
   .data(nodes)
   .enter().append("g");
 
 
-var circles = node.append("circle")
-//circle for drama
-circles.filter(function(d) {
+  var circles = node.append("circle")
+  //circle for drama
+  circles.filter(function(d) {
     return d.drama != null
   })
   .attr("r", function(d) {
@@ -56,30 +49,30 @@ circles.filter(function(d) {
   })
   .attr("fill", "#fdb35d");
 
-//circle for casts
-circles.filter(function(d) {
+  //circle for casts
+  circles.filter(function(d) {
     return d.cast != null
   })
   .attr("r", 5)
   .attr("fill", "#a4d9d6");
 
-//circle for years
-circles.filter(function(d) {
+  //circle for years
+  circles.filter(function(d) {
     return (d.drama == null) && (d.cast == null)
   })
   .attr("r", maxRatings + 5)
   .attr("fill", "#e25a53");
 
-circles.call(d3.drag()
+  circles.call(d3.drag()
   .on("start", dragstarted)
   .on("drag", dragged)
   .on("end", dragended));
 
-circles
+  circles
   .on('click.fade', fade(0.1))
   .on('mouseout.fade', fade(1));
 
-const textElems = svg.append('g')
+  const textElems = svg.append('g')
   .selectAll('text')
   .data(nodes)
   .join('text')
@@ -87,30 +80,30 @@ const textElems = svg.append('g')
   .attr('font-size', 10)
   .attr('font-size', 10);
 
-textElems.call(d3.drag()
+  textElems.call(d3.drag()
   .on("start", dragstarted)
   .on("drag", dragged)
   .on("end", dragended));
 
-textElems
+  textElems
   .on('click.fade', fade(0.1))
   .on('mouseout.fade', fade(1));
 
-node.append("title")
+  node.append("title")
   .text(function(d) {
     return d.id;
   });
 
-//將模擬器綁定點、線
-simulation
+  //將模擬器綁定點、線
+  simulation
   .nodes(nodes) //產生index,vx,xy,x,y數值來做視覺化
   .on("tick", ticked); //tick為模擬器的計時器，用來監聽綁定後數據的改變
 
-simulation.force("link")
+  simulation.force("link")
   .links(links);
 
-//定義ticked()，用來當tick發現數據改變時，要做的動作
-function ticked() {
+  //定義ticked()，用來當tick發現數據改變時，要做的動作
+  function ticked() {
   link
     .attr("x1", function(d) {
       return d.source.x;
@@ -148,28 +141,28 @@ function ticked() {
     .attr("x", d => d.x + 10)
     .attr("y", d => d.y)
     .attr("visibility", "hidden");
-}
+  }
 
-//定義拖拉的動作，因為在拖拉的過程中，會中斷模擬器，所以利用restart來重啟
-function dragstarted(d) {
+  //定義拖拉的動作，因為在拖拉的過程中，會中斷模擬器，所以利用restart來重啟
+  function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
   d.fx = d.x;
   d.fy = d.y;
-}
+  }
 
-function dragged(d) {
+  function dragged(d) {
   d.fx = d3.event.x;
   d.fy = d3.event.y;
-}
+  }
 
-function dragended(d) {
+  function dragended(d) {
   if (!d3.event.active) simulation.alphaTarget(0);
   d.fx = null;
   d.fy = null;
-}
+  }
 
-//滑鼠滑過時透明度
-function fade(opacity) {
+  //滑鼠滑過時透明度
+  function fade(opacity) {
   return d => {
     node.style('opacity', function(o) {
       return isConnected(d, o) ? 1 : opacity
@@ -184,13 +177,15 @@ function fade(opacity) {
       link.style('stroke-opacity', 0.3)
     }
   }
-}
+  }
 
-const linkedByIndex = {};
-links.forEach(d => {
+  const linkedByIndex = {};
+  links.forEach(d => {
   linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
-});
+  });
 
-function isConnected(a, b) {
+  function isConnected(a, b) {
   return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
+  }
 }
+setGraph();
