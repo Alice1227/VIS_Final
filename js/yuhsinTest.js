@@ -189,3 +189,14 @@ function setGraph(){
   }
 }
 setGraph();
+
+function setBarGraph(ratings){
+  dataSorting(ratings);
+  data_five=[]
+  for( i=0; i<5; i++){
+    data_five.push(data[i])
+  }
+  console.log(ratings,data_five);
+}
+
+setBarGraph("average");

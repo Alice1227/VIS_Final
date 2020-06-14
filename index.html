@@ -27,9 +27,21 @@
         </div>
       </div>
       <div class="col-sm-4">
-        <!-- <div class="panel panel-primary">
+        <div class="panel panel-primary">
           <div class="panel-heading">選取收視率</div>
-          <div class="panel-body">這裡是收視率radio</div>
+          <div class="panel-body">
+            <form id="form" class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-secondary active">
+                <input type="radio" name="ratings" value="average" onclick="setBarGraph('average')">平均收視率<br>
+              </label>
+              <label class="btn btn-secondary">
+                <input type="radio" name="ratings" value="first" onclick="setBarGraph('first')">首回收視率<br>
+              </label>
+              <label class="btn btn-secondary">
+                <input type="radio" name="ratings" value="last" onclick="setBarGraph('last')">終回收視率<br>
+              </label>
+            </form>
+          </div>
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">前五名</div>
@@ -38,7 +50,7 @@
         <div class="panel panel-primary">
           <div class="panel-heading">該node詳情</div>
           <div class="panel-body">這裡是詳情</div>
-        </div> -->
+        </div>
       </div>
     </div>
 
