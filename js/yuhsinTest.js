@@ -12,7 +12,7 @@ function setGraph() {
     .force("link", d3.forceLink(link).id(function(d) {
       return d.id;
     }))
-    // 在 y軸 方向上施加一個力把整個圖形壓扁一點
+    // 在 x、y軸 方向上施加一個力把整個圖形壓扁一點
     .force('xt', d3.forceX().strength(() => 0.02))
     .force('xb', d3.forceX(width).strength(() => 0.02))
     .force('yt', d3.forceY().strength(() => 0.04))
