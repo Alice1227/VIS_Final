@@ -21,7 +21,7 @@ var simulation = d3.forceSimulation(node)
     return d.id;
   }))
   // 在 y軸 方向上施加一個力把整個圖形壓扁一點
-  .force('yt', d3.forceY().strength(() => 0.025)) 
+  .force('yt', d3.forceY().strength(() => 0.025))
   .force('yb', d3.forceY(height).strength(() => 0.025))
   .force("charge", d3.forceManyBody())
   // 避免節點相互覆蓋
@@ -67,33 +67,33 @@ circles.filter(function(d) {
 circles.filter(function(d) {
     return (d.drama == null) && (d.cast == null)
   })
-  .attr("r", maxRatings+5)
+  .attr("r", maxRatings + 5)
   .attr("fill", "#e25a53");
-  
+
 circles.call(d3.drag()
   .on("start", dragstarted)
   .on("drag", dragged)
   .on("end", dragended));
 
 circles
-  .on('mouseover.fade', fade(0.1))
+  .on('click.fade', fade(0.1))
   .on('mouseout.fade', fade(1));
 
 const textElems = svg.append('g')
   .selectAll('text')
   .data(nodes)
   .join('text')
-    .text(d => d.id)
-    .attr('font-size',10)
-    .attr('font-size',10);
+  .text(d => d.id)
+  .attr('font-size', 10)
+  .attr('font-size', 10);
 
 textElems.call(d3.drag()
-    .on("start", dragstarted)
-    .on("drag", dragged)
-    .on("end", dragended));
+  .on("start", dragstarted)
+  .on("drag", dragged)
+  .on("end", dragended));
 
 textElems
-  .on('mouseover.fade', fade(0.1))
+  .on('click.fade', fade(0.1))
   .on('mouseout.fade', fade(1));
 
 node.append("title")
@@ -171,10 +171,14 @@ function dragended(d) {
 //滑鼠滑過時透明度
 function fade(opacity) {
   return d => {
-    node.style('opacity', function (o) { return isConnected(d, o) ? 1 : opacity });
-    textElems.style('visibility', function (o) { return isConnected(d, o) ? "visible" : "hidden" });
+    node.style('opacity', function(o) {
+      return isConnected(d, o) ? 1 : opacity
+    });
+    textElems.style('visibility', function(o) {
+      return isConnected(d, o) ? "visible" : "hidden"
+    });
     link.style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
-    if(opacity === 1){
+    if (opacity === 1) {
       node.style('opacity', 1)
       textElems.style('visibility', 'hidden')
       link.style('stroke-opacity', 0.3)
@@ -183,9 +187,9 @@ function fade(opacity) {
 }
 
 const linkedByIndex = {};
-  links.forEach(d => {
-    linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
-  });
+links.forEach(d => {
+  linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+});
 
 function isConnected(a, b) {
   return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
