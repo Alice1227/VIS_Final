@@ -56,7 +56,16 @@ function setGraph() {
         return d.last * 0.8;
       }
     })
-    .attr("fill", d => colors(d.year));
+    .attr("fill", d => colors(d.year))
+    .on('click', function(d){
+      d3.select("#detialDiv").attr("hidden",null);
+      d3.select("#castsDetail").text(d.casts);
+      d3.select("#seriesDetail").text(d.series);
+      d3.select("#introductionDetail").text(d.introduction);
+      d3.select("#firstDetail").text(d.first);
+      d3.select("#lastDetail").text(d.last);
+      d3.select("#averageDetail").text(d.average);
+    });
 
   //建立每個演員於link出現次數 By益菕
   let cs = [];
@@ -137,7 +146,6 @@ function setGraph() {
 
   circles
     .on('click.fade', fade(0.1))
-    .on('click',showDetial())
     .on('mouseout.fade', fade(1));
 
   const textElems = svg.append('g')
@@ -254,55 +262,8 @@ function setGraph() {
   function isConnected(a, b) {
     return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
   }
-<<<<<<< HEAD
 
   function showDetial(){
     console.log("hiiiii");
   }
 }
-
-//Bar Chart
-//定義圖表左右距離與整體長寬
-var margin_bar = {
-  top: 10,
-  right: 10,
-  bottom: 10,
-  left: 10
-},
-width_bar = 200 - margin_bar.left - margin_bar.right,
-height_bar = 200 - margin_bar.top - margin_bar.bottom;
-
-var x = d3.scaleBand()
-.rangeRound([0, width_bar], .1);
-
-var y = d3.scaleLinear()
-.range([height_bar, 0]);
-
-var xAxis_bar = d3.axisBottom(x);
-
-var yAxis_bar = d3.axisLeft(y);
-
-var color = d3.scaleOrdinal()
-.range(["#DD84A1", "#FFBBBE", "#FEE698", "#CBE3B3", "#40DEF1"]);
-
-var svg = d3.select('#barChart').append("svg")
-.attr("width", width_bar + margin_bar.left + margin_bar.right)
-.attr("height", height_bar + margin_bar.top + margin_bar.bottom)
-.append("g")
-.attr("transform", "translate(" + margin_bar.left + "," + margin_bar.top + ")");
-
-
-function setBarGraph(ratings) {
-  dataSorting(ratings);
-  data_five = []
-  for (i = 0; i < 5; i++) {
-    data_five.push(data[i])
-  }
-  console.log(ratings, data_five);
-  
-}
-
-setBarGraph("average");
-=======
-}
->>>>>>> a593707bef4c501f65113c67ea0ba584b21bb7e0
