@@ -9,6 +9,14 @@ body {
   margin: 50px 0 20px 0;
 }
 
+.panel-heading {
+  margin-bottom: 10px;
+}
+
+#form {
+  width: 100%;
+}
+
 .tooltip {
   z-index: 100;
   position: absolute;

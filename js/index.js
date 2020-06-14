@@ -22,12 +22,14 @@ var mySlider = new rSlider({
     year_vals = vals.split(",");
     setUpData(year_vals[0], year_vals[1]);
     setGraph();
+    setBarGraph(current_ratings);
   }
 });
 
-setUpData(2011, 2012);
+setUpData(2010, 2011);
 
 function setUpData(startYear, endYear) {
+  firstTime = true;
   // console.log("現在年份：" + startYear + "," + endYear);
 
   //因為一次十年node實在太多，先限定
@@ -47,13 +49,7 @@ function setUpData(startYear, endYear) {
   }
   // console.log("years: ", years);
 
-  // var current_ratings = document.getElementsByClassName("btn btn-secondary active");
-  $(".rating_btn").on("click", () => {
-    current_ratings = $("input[name='ratings']:checked").val();
-    dataSorting(current_ratings);
-    setGraph();
-    //alert(current_ratings);
-  })
+
 
 
   //dataSorting("average");
@@ -127,3 +123,9 @@ function dataSorting(ratings) {
   // let drama data be sorted by descending of average
 
 }
+// var current_ratings = document.getElementsByClassName("btn btn-secondary active");
+$(".rating_btn").on("click", () => {
+  current_ratings = $("input[name='ratings']:checked").val();
+  dataSorting(current_ratings);
+  setGraph();
+})
