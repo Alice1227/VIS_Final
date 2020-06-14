@@ -1,3 +1,5 @@
+let current_ratings = "average";
+
 // split casts into array
 for (let d of dataOriginal) {
   d.id = d.drama;
@@ -26,7 +28,7 @@ var mySlider = new rSlider({
 setUpData(2011, 2012);
 
 function setUpData(startYear, endYear) {
-  console.log("現在年份：" + startYear + "," + endYear);
+  // console.log("現在年份：" + startYear + "," + endYear);
 
   //因為一次十年node實在太多，先限定
   data = dataOriginal.filter((item, index, array) => (item.year >= startYear) && (item.year <= endYear));
@@ -43,14 +45,22 @@ function setUpData(startYear, endYear) {
       uniqueYears.push(d.year.toString());
     }
   }
-  console.log("years: ", years);
+  // console.log("years: ", years);
 
   // var current_ratings = document.getElementsByClassName("btn btn-secondary active");
-  dataSorting("average");
+  $(".rating_btn").on("click", () => {
+    current_ratings = $("input[name='ratings']:checked").val();
+    dataSorting(current_ratings);
+    setGraph();
+    //alert(current_ratings);
+  })
+
+
+  //dataSorting("average");
 
   //define the max ratings for the years nodes' adius
   maxRatings = data[0].average;
-  console.log(maxRatings);
+  // console.log(maxRatings);
 
   // get unique casts
   let casts = [];
@@ -89,12 +99,12 @@ function setUpData(startYear, endYear) {
       links.push(obj);
     }
   }
-  //console.log("links: ", links);
+  // console.log("links: ", links);
 
   // setup nodes
   nodes = [];
   nodes = (years.concat(data)).concat(casts);
-  console.log("nodes: ", nodes);
+  // console.log("nodes: ", nodes);
 }
 
 function dataSorting(ratings) {
@@ -102,17 +112,17 @@ function dataSorting(ratings) {
     data = data.sort(function(a, b) {
       return a.average < b.average ? 1 : -1;
     })
-    console.log("data sorted by average:", data);
+    // console.log("data sorted by average:", data);
   } else if (ratings == "first") {
     data = data.sort(function(a, b) {
       return a.first < b.first ? 1 : -1;
     })
-    console.log("data sorted by fisrt:", data);
+    // console.log("data sorted by fisrt:", data);
   } else {
     data = data.sort(function(a, b) {
       return a.last < b.last ? 1 : -1;
     })
-    console.log("data sorted by last:", data);
+    // console.log("data sorted by last:", data);
   }
   // let drama data be sorted by descending of average
 
