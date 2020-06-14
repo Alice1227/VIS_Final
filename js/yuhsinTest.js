@@ -1,10 +1,16 @@
 let width = $("#network-wrapper").width();
 let height = 600;
 let svg = d3.select("#networkChart svg").attr("width", width).attr("height", height);
+let cs = [];
+let uc = [];
+let times = [];
 // console.log(width, height);
 
 //根據篩選出的data繪製network圖形
 function setGraph() {
+  cs = [];
+  uc = [];
+  times = [];
   d3.selectAll("g").remove();
 
   //繪製線、點、文字
@@ -47,27 +53,24 @@ function setGraph() {
     })
     .attr("class", "drama-node")
     .append("circle")
-    .attr("r", function(d) {
+    .attr("r", (d) => {
+      console.log(d);
       if (current_ratings == "average") {
-        return d.average * 0.8;
+        return d["average"] * 0.8;
       } else if (current_ratings == "first") {
-        return d.first * 0.8;
+        return d["first"] * 0.8;
       } else if (current_ratings == "last") {
-        return d.last * 0.8;
+        return d["last"] * 0.8;
       }
     })
     .attr("fill", d => colors(d.year));
 
   //建立每個演員於link出現次數 By益菕
-  let cs = [];
-  let uc = [];
-  let times = [];
-  // console.log(links);
+  console.log(links);
   for (let i = 0; i < links.length; i++) {
-    //console.log(links[i]["target"]);
     cs.push(links[i].target);
   }
-  // console.log(cs);
+  console.log(cs);
   for (let i = 0; i < cs.length; i++) {
     if (uc.indexOf(cs[i]) == -1) {
       uc.push(cs[i]);
@@ -83,8 +86,8 @@ function setGraph() {
       }
     }
   }
-  // console.log(uc);
-  // console.log(times);
+  console.log(uc);
+  console.log(times);
 
   // circle for casts
   circles.filter(function(d) {
@@ -92,20 +95,14 @@ function setGraph() {
     })
     .attr("class", "cast-node")
     .append("circle")
-    .attr("r", (d, i) => {
+    .attr("r", (d) => {
       let c = 0;
       let r = 2;
       for (let a = 0; a < times.length; a++) {
-        // console.log(d["cast"]);
-        // console.log(times[a]["cast"]);
-        // console.log(times[a]["time"]);
         if (d["cast"] === times[a]["cast"]) {
           r = r + times[a]["time"] * 1.5;
         }
       }
-      // console.log(d);
-      // console.log(i);
-      // console.log(d, r);
       return r;
     })
     .attr("fill", "#eee")
@@ -143,7 +140,14 @@ function setGraph() {
     .selectAll('text')
     .data(nodes)
     .join('text')
-    .text(d => d.id)
+    .text(d => {
+      if (typeof(d.id) != "number") {
+        return d.id;
+      } else {
+        return "";
+
+      }
+    })
     .attr('font-size', 10);
 
   textElems.call(d3.drag()
