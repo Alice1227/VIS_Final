@@ -130,6 +130,7 @@ function setGraph() {
 
   circles
     .on('click.fade', fade(0.1))
+    .on('click',showDetial())
     .on('mouseout.fade', fade(1));
 
   const textElems = svg.append('g')
@@ -245,6 +246,10 @@ function setGraph() {
 
   function isConnected(a, b) {
     return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
+  }
+
+  function showDetial(){
+    console.log("hiiiii");
   }
 }
 
