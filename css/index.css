@@ -4,19 +4,22 @@ body {
 }
 
 #slider-wrapper {
-  width: 100%;
   display: flex;
   justify-content: center;
   margin: 50px 0 20px 0;
 }
 
-#network-wrapper {
+.box {
   border: 1.5px solid #999;
   border-radius: 10px;
 }
 
 .panel-heading {
   margin-bottom: 10px;
+}
+
+.info {
+  padding: 10px;
 }
 
 #form {

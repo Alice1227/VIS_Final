@@ -3,7 +3,7 @@
 let margin_bar = {
     top: 20,
     right: 0,
-    bottom: 140,
+    bottom: 50,
     left: 20
   },
   width_bar = $("#barChart").width(),
@@ -42,13 +42,39 @@ function setBarGraph(ratings) {
     .attr("transform", `translate(0, ${height_bar - margin_bar.bottom})`)
     .call(xAxis_bar)
     .selectAll("text")
-    .attr('font-size', 12)
-    .style("text-anchor", "start")
-    .attr("rotate", -90)
-    .attr("dx", "2em")
-    .attr("dy", "-0.3em")
-    .attr("kerning", 0)
-    .attr("transform", "rotate(90)");
+    // .attr('font-size', 12)
+    .style("text-anchor", "middle")
+    .call(wrap, x.bandwidth() - 20);
+
+  // .attr("rotate", -90)
+  // .attr("dx", "2em")
+  // .attr("dy", "-0.3em")
+  // .attr("kerning", 0)
+  // .attr("transform", "rotate(90)");
+
+  function wrap(text, width) {
+    text.each(function() {
+      var text = d3.select(this),
+        words = text.text().split(/\s+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 1.1, // ems
+        y = text.attr("y"),
+        dy = parseFloat(text.attr("dy")),
+        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+      while (word = words.pop()) {
+        line.push(word);
+        tspan.text(line.join(" "));
+        if (tspan.node().getComputedTextLength() > width) {
+          line.pop();
+          tspan.text(line.join(" "));
+          line = [word];
+          tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+        }
+      }
+    });
+  }
 
   //繪製y軸
   barSvg.append("g")

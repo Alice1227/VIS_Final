@@ -65,9 +65,9 @@ function setGraph() {
       }
     })
     .attr("fill", d => colors(d.year))
-    .on('click', function(d){
-      d3.select("#detialDiv").attr("hidden",null);
-      d3.select("#detialDiv").html('<h6>關於『'+d.id+'』</h6><table class="table table-striped" style="height:300px;"><tbody><tr><td class="text-nowrap">主要演員名單</td><td>'+d.casts+'</td></tr><tr><td class="text-nowrap">集數</td><td>'+d.series+'</td></tr><tr><td class="text-nowrap">劇情簡介</td><td>'+d.introduction+'</td></tr><tr><td class="text-nowrap">首回收視率</td><td>'+d.first+'</td></tr><tr><td class="text-nowrap">終回收視率</td><td>'+d.last+'</td></tr><tr><td class="text-nowrap">平均收視率</td></td><td>'+d.average+'</td></tr></tbody></table>');
+    .on('click', function(d) {
+      d3.select("#detailDiv").attr("hidden", null);
+      d3.select("#detailDiv").html('<h6>關於『' + d.id + '』</h6><table class="table table-striped" style="height:205px;"><tbody><tr><td class="text-nowrap">主要演員名單</td><td>' + d.casts + '</td></tr><tr><td class="text-nowrap">集數</td><td>' + d.series + '</td></tr><tr><td class="text-nowrap">劇情簡介</td><td>' + d.introduction + '</td></tr><tr><td class="text-nowrap">首回收視率</td><td>' + d.first + '</td></tr><tr><td class="text-nowrap">終回收視率</td><td>' + d.last + '</td></tr><tr><td class="text-nowrap">平均收視率</td></td><td>' + d.average + '</td></tr></tbody></table>');
     });
 
   //建立每個演員於link出現次數 By益菕
@@ -172,10 +172,11 @@ function setGraph() {
     .on('click.fade', fade(0.1))
     .on('mouseout.fade', fade(1));
 
-  // node.append("title")
-  //   .text(function(d) {
-  //     return d.id;
-  //   });
+  // tooltip的標籤
+  node.append("title")
+    .text(function(d) {
+      return d.id;
+    });
 
   //將模擬器綁定點、線
   simulation
@@ -269,9 +270,5 @@ function setGraph() {
 
   function isConnected(a, b) {
     return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
-  }
-
-  function showDetial() {
-    console.log("hiiiii");
   }
 }
