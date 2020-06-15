@@ -6,7 +6,6 @@ let uc = [];
 let times = [];
 
 let isZoomIn = false;
-// console.log(width, height);
 
 //根據篩選出的data繪製network圖形
 function setGraph() {
@@ -139,8 +138,7 @@ function setGraph() {
     .on("end", dragended));
 
   circles
-    .on('click', fade(0.1))
-    .on('mouseout.fade', fade(1));
+    .on('click', fade());
 
   const textElems = svg.append('g')
     .selectAll('text')
@@ -161,8 +159,7 @@ function setGraph() {
     .on("end", dragended));
 
   textElems
-    .on('click', fade(0.1))
-    .on('mouseout.fade', fade(1));
+    .on('click', fade());
 
   // tooltip的標籤
   node.append("title")
@@ -238,8 +235,11 @@ function setGraph() {
   }
 
   //滑鼠滑過時透明度
-  function fade(opacity) {
+  function fade() {
     return d => {
+      isZoomIn = !isZoomIn;
+      let opacity = isZoomIn ? 0.1 : 1;
+
       node.style('opacity', function(o) {
         return isConnected(d, o) ? d["opacity"] : opacity;
       });
