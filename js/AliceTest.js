@@ -3,14 +3,15 @@
 let margin_bar = {
     top: 20,
     right: 0,
-    bottom: 120,
+    bottom: 140,
     left: 20
   },
   width_bar = $("#barChart").width(),
   height_bar = 300;
 
 let x = d3.scaleBand()
-  .rangeRound([margin_bar.left, width_bar - margin_bar.right], .1);
+  .range([margin_bar.left, width_bar - margin_bar.left])
+  .padding(0.3);
 let y = d3.scaleLinear()
   .range([height_bar - margin_bar.bottom, margin_bar.top]);
 
@@ -19,7 +20,7 @@ let yAxis_bar = d3.axisLeft(y);
 
 let barSvg = d3.select('#barChart svg')
   .attr("width", width_bar)
-  .attr("height", height_bar)
+  .attr("height", height_bar);
 
 function setBarGraph(ratings) {
   dataSorting(ratings);
@@ -75,38 +76,13 @@ function setBarGraph(ratings) {
     .enter().append("g")
     .attr("class", "g");
 
-  //寫入每條bar的對應數字
-  // slice.selectAll("text")
-  //   .data(function(d) {
-  //     return d[ratings];
-  //   })
-  //   .enter()
-  //   .append('text')
-  //   .attr('class', 'bar-label')
-  //   .attr('text-anchor', 'middle')
-  //   .attr('fill', '#222')
-  //   .attr('stroke', '#222')
-  //   .attr('font-size', 20)
-  //   .attr("x", function(d) {
-  //     return x(d.drama) + x.bandwidth() / 2;
-  //   })
-  //   .attr("y", function(d) {
-  //     return y(0);
-  //   })
-  //   .attr("display", "none")
-  //   .text(function(d) {
-  //     return d[ratings];
-  //   })
-  //   .transition()
-  //   .duration(1000);
-
   //繪製bar
   slice.selectAll("rect")
     .data(data_five)
     .enter()
     .append("rect")
-    .attr("width", x.bandwidth() / 2)
-    .attr("x", d => x(d.drama) + x.bandwidth() / 4)
+    .attr("width", x.bandwidth())
+    .attr("x", d => x(d.drama))
     .style("fill", "#00b3bc")
     .attr("y", d => y(0))
     .attr("height", 0);
@@ -121,21 +97,34 @@ function setBarGraph(ratings) {
       return y(0) - y(d[ratings]);
     });
 
+  let format = d3.format(".2f");
+  // 寫入每條bar的對應數字
+  slice.selectAll("text")
+    .data(data_five)
+    .enter()
+    .append('text')
+    .attr('class', 'bar-label')
+    .attr('text-anchor', 'middle')
+    .attr('fill', '#fff')
+    .attr('font-size', 10)
+    .attr("x", d => x(d.drama) + x.bandwidth() / 2)
+    .attr("y", d => y(0))
+    .attr("display", "none")
+    .text(d => d[ratings]);
+
   //製作動態text
-  // slice.selectAll("text")
-  //   .transition()
-  //   .delay(100)
-  //   .duration(1000)
-  //   .attr("display", "")
-  //   .attr("y", function(d) {
-  //     return y(d[ratings]) - 10;
-  //   })
-  //   .tween("string", (d) => {
-  //     let i = d3.interpolateRound(0, d[ratings]);
-  //     return function(t) {
-  //       this.textContent = formatNumber(i(t).toString()) + "元";
-  //     }
-  //   });
+  slice.selectAll("text")
+    .transition()
+    .duration(1000)
+    .delay((d, i) => i * 200)
+    .attr("display", "")
+    .attr("y", d => y(d[ratings]) + 20)
+    .tween("string", d => {
+      let i = d3.interpolate(0, d[ratings]);
+      return function(t) {
+        this.textContent = format(i(t).toString());
+      }
+    });
 }
 
-setBarGraph("average");
+// setBarGraph("average");

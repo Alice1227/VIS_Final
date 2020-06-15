@@ -1,5 +1,6 @@
 body {
   font-family: Microsoft JhengHei;
+  padding: 20px;
 }
 
 #slider-wrapper {
@@ -7,6 +8,11 @@ body {
   display: flex;
   justify-content: center;
   margin: 50px 0 20px 0;
+}
+
+#network-wrapper {
+  border: 1.5px solid #999;
+  border-radius: 10px;
 }
 
 .panel-heading {

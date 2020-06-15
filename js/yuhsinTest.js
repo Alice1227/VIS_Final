@@ -1,5 +1,5 @@
-let width = $("#network-wrapper").width();
-let height = 600;
+let width = $("#networkChart").width();
+let height = 550;
 let svg = d3.select("#networkChart svg").attr("width", width).attr("height", height);
 let firstTime = true;
 let cs = [];
@@ -169,10 +169,10 @@ function setGraph() {
     .on('click.fade', fade(0.1))
     .on('mouseout.fade', fade(1));
 
-  node.append("title")
-    .text(function(d) {
-      return d.id;
-    });
+  // node.append("title")
+  //   .text(function(d) {
+  //     return d.id;
+  //   });
 
   //將模擬器綁定點、線
   simulation

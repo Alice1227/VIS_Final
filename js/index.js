@@ -1,4 +1,6 @@
 let current_ratings = "average";
+let links = [];
+let nodes = [];
 
 // split casts into array
 for (let d of dataOriginal) {
@@ -48,11 +50,6 @@ function setUpData(startYear, endYear) {
     }
   }
   // console.log("years: ", years);
-
-
-
-
-  //dataSorting("average");
 
   //define the max ratings for the years nodes' adius
   maxRatings = data[0].average;
@@ -123,9 +120,10 @@ function dataSorting(ratings) {
   // let drama data be sorted by descending of average
 
 }
-// var current_ratings = document.getElementsByClassName("btn btn-secondary active");
+
 $(".rating_btn").on("click", () => {
   current_ratings = $("input[name='ratings']:checked").val();
   dataSorting(current_ratings);
   setGraph();
+  setBarGraph(current_ratings);
 })
