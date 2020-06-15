@@ -1,7 +1,6 @@
 let width = $("#networkChart").width();
 let height = 560;
 let svg = d3.select("#networkChart svg").attr("width", width).attr("height", height);
-let firstTime = true;
 let cs = [];
 let uc = [];
 let times = [];
@@ -22,13 +21,17 @@ function setGraph() {
     .enter().append("line")
     .attr("stroke-width", 1)
     .attr("stroke-opacity", 0.3)
-    .attr("stroke", "#999");
+    .attr("stroke", "#999")
+    .attr("opacity", d => d["opacity"]);
 
   let node = svg.append("g")
     .attr("class", "nodes")
     .selectAll("g")
     .data(nodes)
-    .enter().append("g");
+    .enter().append("g")
+    .attr("opacity", (d) => {
+      return d["opacity"];
+    });
 
   //Force-Directed graph 需要使用力模擬器forceSimulation，且每個模擬器要定義三個東西：
   //link連結的引力、charge點之間的引力、center引力的中心
@@ -62,14 +65,11 @@ function setGraph() {
     });
 
   //建立每個演員於link出現次數 By益菕
-  //console.log(links);
-  if (firstTime) {
-    for (let i = 0; i < links.length; i++) {
+  //console.log(links)
+  for (let i = 0; i < links.length; i++) {
+    if (links[i].target.id == undefined) {
       cs.push(links[i].target);
-    }
-    firstTime = false;
-  } else {
-    for (let i = 0; i < links.length; i++) {
+    } else {
       cs.push(links[i].target.id);
     }
   }
@@ -137,7 +137,7 @@ function setGraph() {
     .on("end", dragended));
 
   circles
-    .on('click.fade', fade(0.1))
+    .on('click', fade(0.1))
     .on('mouseout.fade', fade(1));
 
   const textElems = svg.append('g')
@@ -215,7 +215,7 @@ function setGraph() {
     textElems
       .attr("x", d => d.x + 10)
       .attr("y", d => d.y)
-      .attr("visibility", "hidden");
+      .attr("visibility", "hidden")
   }
 
   //定義拖拉的動作，因為在拖拉的過程中，會中斷模擬器，所以利用restart來重啟
@@ -240,16 +240,21 @@ function setGraph() {
   function fade(opacity) {
     return d => {
       node.style('opacity', function(o) {
-        return isConnected(d, o) ? 1 : opacity
+        return isConnected(d, o) ? d["opacity"] : opacity;
       });
       textElems.style('visibility', function(o) {
-        return isConnected(d, o) ? "visible" : "hidden"
+        if (showCasts) {
+          return isConnected(d, o) ? "visible" : "hidden";
+        } else {
+          return "hidden";
+        }
+
       });
       link.style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
       if (opacity === 1) {
-        node.style('opacity', 1)
-        textElems.style('visibility', 'hidden')
-        link.style('stroke-opacity', 0.3)
+        node.style('opacity', d => d["opacity"]);
+        textElems.style('visibility', 'hidden');
+        link.style('stroke-opacity', 0.3);
       }
     }
   }
