@@ -1,5 +1,5 @@
 let width = $("#networkChart").width();
-let height = 550;
+let height = 560;
 let svg = d3.select("#networkChart svg").attr("width", width).attr("height", height);
 let firstTime = true;
 let cs = [];
@@ -54,20 +54,11 @@ function setGraph() {
     })
     .attr("class", "drama-node")
     .append("circle")
-    .attr("r", (d) => {
-      //console.log(d);
-      if (current_ratings == "average") {
-        return d["average"] * 0.8;
-      } else if (current_ratings == "first") {
-        return d["first"] * 0.8;
-      } else if (current_ratings == "last") {
-        return d["last"] * 0.8;
-      }
-    })
+    .attr("r", d => d[current_ratings] * 0.8)
     .attr("fill", d => colors(d.year))
     .on('click', function(d) {
-      d3.select("#detailDiv").attr("hidden", null);
-      d3.select("#detailDiv").html('<h6>關於『' + d.id + '』</h6><table class="table table-striped" style="height:205px;"><tbody><tr><td class="text-nowrap">主要演員名單</td><td>' + d.casts + '</td></tr><tr><td class="text-nowrap">集數</td><td>' + d.series + '</td></tr><tr><td class="text-nowrap">劇情簡介</td><td>' + d.introduction + '</td></tr><tr><td class="text-nowrap">首回收視率</td><td>' + d.first + '</td></tr><tr><td class="text-nowrap">終回收視率</td><td>' + d.last + '</td></tr><tr><td class="text-nowrap">平均收視率</td></td><td>' + d.average + '</td></tr></tbody></table>');
+      // d3.select("#detailDiv").attr("hidden", null);
+      d3.select("#detailDiv").html('<h6><b>關於『' + d.id + '』</b></h6><table class="table table-striped"><tbody><tr><td class="text-nowrap">主要演員名單</td><td>' + d.casts + '</td></tr><tr><td class="text-nowrap">集數</td><td>' + d.series + '</td></tr><tr><td class="text-nowrap">劇情簡介</td><td>' + d.introduction + '</td></tr><tr><td class="text-nowrap">平均收視率</td><td>' + d.average + ' (%)</td></tr><tr><td class="text-nowrap">首回收視率</td><td>' + d.first + ' (%)</td></tr><tr><td class="text-nowrap">終回收視率</td><td>' + d.last + ' (%)</td></tr></tbody></table>');
     });
 
   //建立每個演員於link出現次數 By益菕

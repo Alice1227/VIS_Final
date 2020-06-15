@@ -8,13 +8,14 @@ for (let d of dataOriginal) {
   d.casts = d.casts.split(",");
 }
 
+let slider_width = $("#slider-wrapper").width();
 //range slider of years
-var mySlider = new rSlider({
+let mySlider = new rSlider({
   target: '#slider',
   values: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
   range: true, // range slider
   set: [2010, 2011], // an array of preselected values
-  width: 800,
+  width: slider_width,
   scale: true,
   labels: true,
   tooltip: true,

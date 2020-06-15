@@ -3,11 +3,11 @@
 let margin_bar = {
     top: 20,
     right: 0,
-    bottom: 50,
+    bottom: 60,
     left: 20
   },
   width_bar = $("#barChart").width(),
-  height_bar = 300;
+  height_bar = 280;
 
 let x = d3.scaleBand()
   .range([margin_bar.left, width_bar - margin_bar.left])
@@ -42,39 +42,9 @@ function setBarGraph(ratings) {
     .attr("transform", `translate(0, ${height_bar - margin_bar.bottom})`)
     .call(xAxis_bar)
     .selectAll("text")
-    // .attr('font-size', 12)
     .style("text-anchor", "middle")
-    .call(wrap, x.bandwidth() - 20);
-
-  // .attr("rotate", -90)
-  // .attr("dx", "2em")
-  // .attr("dy", "-0.3em")
-  // .attr("kerning", 0)
-  // .attr("transform", "rotate(90)");
-
-  function wrap(text, width) {
-    text.each(function() {
-      var text = d3.select(this),
-        words = text.text().split(/\s+/).reverse(),
-        word,
-        line = [],
-        lineNumber = 0,
-        lineHeight = 1.1, // ems
-        y = text.attr("y"),
-        dy = parseFloat(text.attr("dy")),
-        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-      while (word = words.pop()) {
-        line.push(word);
-        tspan.text(line.join(" "));
-        if (tspan.node().getComputedTextLength() > width) {
-          line.pop();
-          tspan.text(line.join(" "));
-          line = [word];
-          tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-        }
-      }
-    });
-  }
+    .attr("font-family", "Microsoft JhengHei")
+    .call(wrap, x.bandwidth() + 30);
 
   //繪製y軸
   barSvg.append("g")
@@ -86,6 +56,7 @@ function setBarGraph(ratings) {
     .attr('fill', '#000')
     .attr('font-size', 12)
     .style("text-anchor", "start")
+    .attr("font-family", "Microsoft JhengHei")
     .style('font-weight', 'bold')
     .text(() => {
       if (ratings == "average") {
@@ -153,4 +124,61 @@ function setBarGraph(ratings) {
     });
 }
 
-// setBarGraph("average");
+function getLines(text, width) {
+  // create a dummy element
+  let dummy = d3.select('body')
+    .append('p')
+    .classed('dummy-text-wrapper', true)
+    // set its size to the one we want
+    .style('width', width + 'px')
+    .text(text);
+
+  let textNode = dummy.node().childNodes[0];
+  let lines = [''];
+  let range = document.createRange();
+  let current = 0;
+  // get default top value
+  range.setStart(textNode, 0);
+  let prevTop = range.getBoundingClientRect().top;
+  let nextTop = prevTop;
+  // iterate through all characters
+  while (current < text.length) {
+    // move the cursor
+    range.setStart(textNode, current + 1);
+    // check top position
+    nextTop = range.getBoundingClientRect().top;
+
+    if (nextTop !== prevTop) {
+      // new line
+      lines.push("");
+    }
+    // add the current character to the last line
+    lines[lines.length - 1] += text[current++];
+    prevTop = nextTop;
+  }
+  // clean up the DOM
+  dummy.remove();
+  return lines;
+}
+
+function wrap(text, width) {
+  text.each(function() {
+    let text = d3.select(this),
+      words = text.text(),
+      lines = getLines(words, width),
+      line = [],
+      lineHeight = 1.3,
+      y = text.attr("y"),
+      dy = parseFloat(text.attr("dy"));
+
+    text.text('');
+
+    lines.forEach(function(words, lineNumber) {
+      text.append("tspan")
+        .attr("x", 0)
+        .attr("y", y)
+        .attr("dy", lineNumber * lineHeight + dy + "em")
+        .text(words);
+    });
+  });
+}
