@@ -64,7 +64,11 @@ function setGraph() {
         return d["last"] * 0.8;
       }
     })
-    .attr("fill", d => colors(d.year));
+    .attr("fill", d => colors(d.year))
+    .on('click', function(d){
+      d3.select("#detialDiv").attr("hidden",null);
+      d3.select("#detialDiv").html('<h6>關於『'+d.id+'』</h6><table class="table table-striped" style="height:300px;"><tbody><tr><td class="text-nowrap">主要演員名單</td><td>'+d.casts+'</td></tr><tr><td class="text-nowrap">集數</td><td>'+d.series+'</td></tr><tr><td class="text-nowrap">劇情簡介</td><td>'+d.introduction+'</td></tr><tr><td class="text-nowrap">首回收視率</td><td>'+d.first+'</td></tr><tr><td class="text-nowrap">終回收視率</td><td>'+d.last+'</td></tr><tr><td class="text-nowrap">平均收視率</td></td><td>'+d.average+'</td></tr></tbody></table>');
+    });
 
   //建立每個演員於link出現次數 By益菕
   //console.log(links);
@@ -143,7 +147,6 @@ function setGraph() {
 
   circles
     .on('click.fade', fade(0.1))
-    .on('click', showDetial())
     .on('mouseout.fade', fade(1));
 
   const textElems = svg.append('g')
