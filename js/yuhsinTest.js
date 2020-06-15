@@ -67,12 +67,7 @@ function setGraph() {
     .attr("fill", d => colors(d.year))
     .on('click', function(d){
       d3.select("#detialDiv").attr("hidden",null);
-      d3.select("#castsDetail").text(d.casts);
-      d3.select("#seriesDetail").text(d.series);
-      d3.select("#introductionDetail").text(d.introduction);
-      d3.select("#firstDetail").text(d.first);
-      d3.select("#lastDetail").text(d.last);
-      d3.select("#averageDetail").text(d.average);
+      d3.select("#detialDiv").html('<h6>關於『'+d.id+'』</h6><table class="table table-striped" style="height:300px;"><tbody><tr><td class="text-nowrap">主要演員名單</td><td>'+d.casts+'</td></tr><tr><td class="text-nowrap">集數</td><td>'+d.series+'</td></tr><tr><td class="text-nowrap">劇情簡介</td><td>'+d.introduction+'</td></tr><tr><td class="text-nowrap">首回收視率</td><td>'+d.first+'</td></tr><tr><td class="text-nowrap">終回收視率</td><td>'+d.last+'</td></tr><tr><td class="text-nowrap">平均收視率</td></td><td>'+d.average+'</td></tr></tbody></table>');
     });
 
   //建立每個演員於link出現次數 By益菕
