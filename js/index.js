@@ -1,7 +1,9 @@
 let current_ratings = "average";
 let links = [];
 let nodes = [];
-
+let showCasts = true;
+let sy;
+let ey;
 // split casts into array
 for (let d of dataOriginal) {
   d.id = d.drama;
@@ -22,7 +24,9 @@ var mySlider = new rSlider({
   disabled: false, // is disabled?
   onChange: function(vals) {
     year_vals = vals.split(",");
-    setUpData(year_vals[0], year_vals[1]);
+    sy = year_vals[0];
+    ey = year_vals[1]
+    setUpData(sy, ey);
     setGraph();
     setBarGraph(current_ratings);
   }
@@ -31,11 +35,11 @@ var mySlider = new rSlider({
 setUpData(2010, 2011);
 
 function setUpData(startYear, endYear) {
-  firstTime = true;
   // console.log("現在年份：" + startYear + "," + endYear);
 
   //因為一次十年node實在太多，先限定
   data = dataOriginal.filter((item, index, array) => (item.year >= startYear) && (item.year <= endYear));
+
 
   //get unique years
   let years = [];
@@ -61,12 +65,24 @@ function setUpData(startYear, endYear) {
   for (let d of data) {
     for (let cast of d.casts) {
       if (uniqueCasts.indexOf(cast) == -1) {
-        let obj = {
-          id: cast,
-          cast: cast
-        };
-        casts.push(obj);
-        uniqueCasts.push(cast);
+        if (showCasts) {
+          let obj = {
+            id: cast,
+            cast: cast,
+            opacity: 1
+          };
+          casts.push(obj);
+          uniqueCasts.push(cast);
+        } else {
+          let obj = {
+            id: cast,
+            cast: cast,
+            opacity: 0
+          };
+          casts.push(obj);
+          uniqueCasts.push(cast);
+        }
+
         //casts.push(cast);
       }
     }
@@ -75,28 +91,75 @@ function setUpData(startYear, endYear) {
 
   // setup links
   links = [];
-  for (let d of data) {
-    //for years and dramas
-    let obj = {
-      source: d.year.toString(),
-      target: d.drama
-    };
-    links.push(obj);
-
-    //for dramas and casts
-    for (let cast of d.casts) {
-      let obj = {
-        source: d.drama,
-        target: cast
-      };
-      links.push(obj);
-    }
-  }
+  nodes = [];
+  // for (let d of data) {
+  //   //for years and dramas
+  //   let obj = {
+  //     source: d.year.toString(),
+  //     target: d.drama
+  //   };
+  //   links.push(obj);
+  //
+  //   //for dramas and casts
+  //   for (let cast of d.casts) {
+  //     let obj = {
+  //       source: d.drama,
+  //       target: cast
+  //     };
+  //     links.push(obj);
+  //   }
+  // }
   // console.log("links: ", links);
 
+  if (showCasts) {
+    for (let d of data) {
+      //for years and dramas
+      let obj = {
+        source: d.year.toString(),
+        target: d.drama,
+        opacity: 1
+      };
+      links.push(obj);
+
+      //for dramas and casts
+      for (let cast of d.casts) {
+        let obj = {
+          source: d.drama,
+          target: cast,
+          opacity: 1
+        };
+        links.push(obj);
+      }
+    }
+
+    nodes = (years.concat(data)).concat(casts);
+  } else {
+    for (let d of data) {
+      //for years and dramas
+      let obj = {
+        source: d.year.toString(),
+        target: d.drama,
+        opacity: 1
+      };
+      links.push(obj);
+
+      //for dramas and casts
+      for (let cast of d.casts) {
+        let obj = {
+          source: d.drama,
+          target: cast,
+          opacity: 0
+        };
+        links.push(obj);
+      }
+    }
+
+    nodes = (years.concat(data)).concat(casts);
+  }
+
   // setup nodes
-  nodes = [];
-  nodes = (years.concat(data)).concat(casts);
+  // nodes = [];
+  // nodes = (years.concat(data)).concat(casts);
   // console.log("nodes: ", nodes);
 }
 
@@ -120,7 +183,17 @@ function dataSorting(ratings) {
   // let drama data be sorted by descending of average
 
 }
-
+$("#showCasts").on("click", function() {
+  if ($(this).prop("checked")) {
+    showCasts = false;
+    setUpData(sy, ey);
+    setGraph();
+  } else {
+    showCasts = true;
+    setUpData(sy, ey);
+    setGraph();
+  }
+})
 $(".rating_btn").on("click", () => {
   current_ratings = $("input[name='ratings']:checked").val();
   dataSorting(current_ratings);
