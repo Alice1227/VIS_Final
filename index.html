@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>VIS Final</title>
+  <title>韓劇與演員之關係</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="css/rSlider.min.css">
   <link rel="stylesheet" href="css/index.css">
@@ -22,13 +22,11 @@
         <div id="slider-wrapper">
           <input type="text" id="slider" class="slider">
         </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="showCasts">
-          <label class="form-check-label" for="showCasts">
-            隱藏演員
-          </label>
-        </div>
         <div class="box">
+          <div class="form-check" id="checkbox">
+            <input class="form-check-input" type="checkbox" value="" id="showCasts">
+            <label class="form-check-label" for="showCasts">隱藏演員</label>
+          </div>
           <div id="networkChart"><svg></svg></div>
           <div class="tooltip"></div>
         </div>
@@ -63,8 +61,9 @@
               <hr>
               <p>1. 顏色節點代表不同年代之韓劇，大小則代表收視率的高低，其之下所包含的灰色小節點為各演員，而大小則代表演出數量</p>
               <p>2. 可以拉動時間軸，擷取特定年代區間之韓劇</p>
-              <p>3. 可以選擇不同類型的收視率，觀察節點大小的變化</p>
-              <p>4. 可以點選各節點，查看與其他節點之關聯性，若為韓劇則會在此顯示詳細資料</p>
+              <p>3. 可以勾選隱藏演員，簡化畫面上的資料</p>
+              <p>4. 可以選擇不同類型的收視率，觀察節點大小的變化</p>
+              <p>5. 可以點選各節點，查看與其他節點之關聯性，若為韓劇則會在此顯示詳細資料</p>
             </div>
           </div>
         </div>
@@ -73,8 +72,8 @@
   </div>
   <script src="js/data.js"></script>
   <script src="js/index.js"></script>
-  <script src="js/yuhsinTest.js"></script>
-  <script src="js/AliceTest.js"></script>
+  <script src="js/networkChart.js"></script>
+  <script src="js/barChart.js"></script>
 </body>
 
 </html>

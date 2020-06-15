@@ -4,12 +4,17 @@ body {
 }
 
 #slider-wrapper {
-  display: flex;
-  justify-content: center;
   margin: 40px 40px 20px 40px;
 }
 
+#checkbox {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+}
+
 .box {
+  position: relative;
   border: 1.5px solid #999;
   border-radius: 10px;
 }

@@ -167,7 +167,7 @@ function wrap(text, width) {
       words = text.text(),
       lines = getLines(words, width),
       line = [],
-      lineHeight = 1.3,
+      lineHeight = 1.5,
       y = text.attr("y"),
       dy = parseFloat(text.attr("dy"));
 

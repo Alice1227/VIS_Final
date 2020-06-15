@@ -4,6 +4,8 @@ let svg = d3.select("#networkChart svg").attr("width", width).attr("height", hei
 let cs = [];
 let uc = [];
 let times = [];
+
+let isZoomIn = false;
 // console.log(width, height);
 
 //根據篩選出的data繪製network圖形
@@ -149,7 +151,6 @@ function setGraph() {
         return d.id;
       } else {
         return "";
-
       }
     })
     .attr('font-size', 10);
@@ -160,7 +161,7 @@ function setGraph() {
     .on("end", dragended));
 
   textElems
-    .on('click.fade', fade(0.1))
+    .on('click', fade(0.1))
     .on('mouseout.fade', fade(1));
 
   // tooltip的標籤
