@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="css/rSlider.min.css">
   <link rel="stylesheet" href="css/index.css">
   <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="https://unpkg.com/d3-simple-slider"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -29,7 +29,6 @@
             <label class="form-check-label" for="showCasts">隱藏演員</label>
           </div>
           <div id="networkChart"><svg></svg></div>
-          <div class="tooltip"></div>
         </div>
       </div>
       <div class="col-sm-3">
@@ -60,11 +59,12 @@
             <div id="detailDiv">
               <h6><b>操作說明</b></h6>
               <hr>
-              <p>1. 顏色節點為不同年代的韓劇，大小則代表收視率的高低，其之下所包含的灰色小節點為各演員，而大小則代表演出數量</p>
-              <p>2. 可以拉動時間軸，擷取特定年代區間的韓劇</p>
-              <p>3. 可以勾選隱藏演員，簡化呈現的資料數量</p>
-              <p>4. 可以選擇不同類型的收視率，觀察節點大小的變化</p>
-              <p>5. 可以點選各節點，查看與其他節點之關聯性，若節點為韓劇則會在此顯示詳細資料，當再次點選任一節點時將關閉檢視模式</p>
+              <p>Network圖表中的顏色節點為不同年代的韓劇，其之下所包含的灰色小節點為各演員，線則連接著彼此的關係。</p>
+              <p>1. 拉動上方的時間軸，可以擷取特定年代區間的韓劇。</p>
+              <p>2. 勾選圖表中的隱藏演員，可以簡化呈現的資料數量。</p>
+              <p>3. 點選右方不同類型的收視率按紐，可以觀察平均、首回、終回間節點大小的變化，且長條圖會顯示特定年代區間內排名前五的韓劇。</p>
+              <p>4. 當滑鼠移過各節點時，可以查看詳細數值，韓劇的大小代表收視率的高低，演員的大小則代表演出數量。</p>
+              <p>5. 當點擊各節點時，可以追蹤自身與其他節點的關聯性，而再次點擊任一節點將會關閉檢視模式，若節點為韓劇則會在此顯示詳細資料。</p>
             </div>
           </div>
         </div>

@@ -1,11 +1,10 @@
 let width = $("#networkChart").width();
 let height = 560;
 let svg = d3.select("#networkChart svg").attr("width", width).attr("height", height);
+let isZoomIn = false;
 let cs = [];
 let uc = [];
 let times = [];
-
-let isZoomIn = false;
 
 //根據篩選出的data繪製network圖形
 function setGraph() {
@@ -61,7 +60,6 @@ function setGraph() {
     .attr("r", d => d[current_ratings] * 0.8)
     .attr("fill", d => colors(d.year))
     .on('click', function(d) {
-      // d3.select("#detailDiv").attr("hidden", null);
       d3.select("#detailDiv").html('<h6><b>關於『' + d.id + '』</b></h6><table class="table table-striped"><tbody><tr><td class="text-nowrap">主要演員名單</td><td>' + d.casts + '</td></tr><tr><td class="text-nowrap">集數</td><td>' + d.series + '</td></tr><tr><td class="text-nowrap">劇情簡介</td><td>' + d.introduction + '</td></tr><tr><td class="text-nowrap">平均收視率</td><td>' + d.average + ' (%)</td></tr><tr><td class="text-nowrap">首回收視率</td><td>' + d.first + ' (%)</td></tr><tr><td class="text-nowrap">終回收視率</td><td>' + d.last + ' (%)</td></tr></tbody></table>');
     });
 
@@ -162,27 +160,30 @@ function setGraph() {
     .on('click', fade());
 
   // tooltip的標籤
-  node.append("title")
-    .text(function(d) {
+  let tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .direction('e')
+    .offset([20, 5])
+    .html(d => {
       if (d.casts != null) {
-        // 劇
-        return d.id + ": " + d[current_ratings] + "%";
-      }
-
-      if (d.cast != null) {
-        // 演員
+        // drama
+        return d.id + ": " + d[current_ratings] + " %";
+      } else if (d.cast != null) {
+        // cast
         for (let i = 0; i < times.length; i++) {
           if (d.id == times[i]["cast"]) {
-            return d.id + ": " + times[i]["time"] + "部";
+            return d.id + ": " + times[i]["time"] + " 部";
           }
         }
-      }
-
-      if (typeof(d.id) == "number") {
-        // 年
+      } else {
+        // year
         return d.id;
       }
     });
+
+  svg.call(tip);
+  node.on('mouseover', tip.show)
+    .on('mouseout', tip.hide);
 
   //將模擬器綁定點、線
   simulation
@@ -209,20 +210,6 @@ function setGraph() {
       });
 
     node
-      // .attr("transformX", function(d) {
-      //   if (d.x >= width || d.x <= 0) {
-      //     return `translate(0)`;
-      //   } else {
-      //     return `translate(${d.x})`;
-      //   }
-      // })
-      // .attr("transformY", function(d) {
-      //   if (d.y >= height || d.y <= 0) {
-      //     return `translate(0)`;
-      //   } else {
-      //     return `translate(${d.y})`;
-      //   }
-      // })
       .attr("transform", function(d) {
         return `translate(${d.x},${d.y})`;
       })
