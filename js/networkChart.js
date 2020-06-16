@@ -164,7 +164,25 @@ function setGraph() {
   // tooltip的標籤
   node.append("title")
     .text(function(d) {
-      return d.id;
+      if (d.casts != null) {
+        // 劇
+        return d.id + ": " + d[current_ratings] + "%";
+
+      }
+
+      if (d.cast != null) {
+        // 演員
+        for (let i = 0; i < times.length; i++) {
+          if (d.id == times[i]["cast"]) {
+            return d.id + ": " + times[i]["time"] + "部";
+          }
+        }
+      }
+
+      if (typeof(d.id) == "number") {
+        // 年
+        return d.id;
+      }
     });
 
   //將模擬器綁定點、線
