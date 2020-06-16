@@ -10,8 +10,8 @@ for (let d of dataOriginal) {
   d.casts = d.casts.split(",");
 }
 
-let slider_width = $("#slider-wrapper").width();
 //range slider of years
+let slider_width = $("#slider-wrapper").width();
 let mySlider = new rSlider({
   target: '#slider',
   values: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
@@ -33,14 +33,11 @@ let mySlider = new rSlider({
   }
 });
 
-setUpData(2010, 2011);
-
 function setUpData(startYear, endYear) {
   // console.log("現在年份：" + startYear + "," + endYear);
 
   //因為一次十年node實在太多，先限定
   data = dataOriginal.filter((item, index, array) => (item.year >= startYear) && (item.year <= endYear));
-
 
   //get unique years
   let years = [];
@@ -83,34 +80,14 @@ function setUpData(startYear, endYear) {
           casts.push(obj);
           uniqueCasts.push(cast);
         }
-
-        //casts.push(cast);
       }
     }
   }
   //console.log("casts: ", casts);
 
-  // setup links
+  // setup nodes and links
   links = [];
   nodes = [];
-  // for (let d of data) {
-  //   //for years and dramas
-  //   let obj = {
-  //     source: d.year.toString(),
-  //     target: d.drama
-  //   };
-  //   links.push(obj);
-  //
-  //   //for dramas and casts
-  //   for (let cast of d.casts) {
-  //     let obj = {
-  //       source: d.drama,
-  //       target: cast
-  //     };
-  //     links.push(obj);
-  //   }
-  // }
-  // console.log("links: ", links);
 
   if (showCasts) {
     for (let d of data) {
@@ -157,13 +134,11 @@ function setUpData(startYear, endYear) {
 
     nodes = (years.concat(data)).concat(casts);
   }
-
-  // setup nodes
-  // nodes = [];
-  // nodes = (years.concat(data)).concat(casts);
   // console.log("nodes: ", nodes);
+  // console.log("links: ", links);
 }
 
+// let drama data be sorted by descending of ratings
 function dataSorting(ratings) {
   if (ratings == "average") {
     data = data.sort(function(a, b) {
@@ -181,9 +156,8 @@ function dataSorting(ratings) {
     })
     // console.log("data sorted by last:", data);
   }
-  // let drama data be sorted by descending of average
-
 }
+
 $("#showCasts").on("click", function() {
   if ($(this).prop("checked")) {
     showCasts = false;
@@ -194,7 +168,8 @@ $("#showCasts").on("click", function() {
     setUpData(sy, ey);
     setGraph();
   }
-})
+});
+
 $(".rating_btn").on("click", () => {
   current_ratings = $("input[name='ratings']:checked").val();
   dataSorting(current_ratings);
