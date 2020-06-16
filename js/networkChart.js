@@ -167,7 +167,6 @@ function setGraph() {
       if (d.casts != null) {
         // 劇
         return d.id + ": " + d[current_ratings] + "%";
-
       }
 
       if (d.cast != null) {
