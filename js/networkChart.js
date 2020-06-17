@@ -6,6 +6,8 @@ let cs = [];
 let uc = [];
 let times = [];
 
+let colors = d3.scaleOrdinal(d3.schemePaired);
+
 //根據篩選出的data繪製network圖形
 function setGraph() {
   cs = [];
@@ -33,6 +35,60 @@ function setGraph() {
       return d["opacity"];
     });
 
+  let legends = svg.append("g")
+    .attr("class", "legends");
+
+  let legend = {
+    x: width - 75,
+    y: height - 30,
+    width: 80,
+    height: 35
+  };
+
+  legends.append("rect")
+    .attr("class", "legend-rect")
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("x", legend.x - 18)
+    .attr("y", legend.y - legend.height / 2)
+    .attr("width", legend.width)
+    .attr("height", legend.height)
+    .attr("fill", "#eee");
+  legends.append("circle")
+    .attr("cx", legend.x)
+    .attr("cy", legend.y)
+    .attr("r", 5)
+    .attr("fill", "#eee")
+    .attr("stroke", "#888");
+  legends
+    .append("text")
+    .attr("x", legend.x + 10)
+    .attr("y", legend.y)
+    .attr("fill", "#888")
+    .style("font-weight", "bold")
+    .style("alignment-baseline", "middle")
+    .text("演員");
+
+  let addLegend = (d, i) => {
+    legends.select(".legend-rect")
+      .attr("y", legend.y - legend.height / 2 - (i + 1) * legend.height)
+      .attr("width", legend.width)
+      .attr("height", (i + 2) * legend.height);
+    legends.append("circle")
+      .attr("cx", legend.x)
+      .attr("cy", legend.y - (i + 1) * legend.height)
+      .attr("r", 5)
+      .attr("fill", colors(d.id));
+    legends
+      .append("text")
+      .attr("x", legend.x + 10)
+      .attr("y", legend.y - (i + 1) * legend.height)
+      .attr("fill", colors(d.id))
+      .style("font-weight", "bold")
+      .style("alignment-baseline", "middle")
+      .text(d.id);
+  }
+
   //Force-Directed graph 需要使用力模擬器forceSimulation，且每個模擬器要定義三個東西：
   //link連結的引力、charge點之間的引力、center引力的中心
   let simulation = d3.forceSimulation(node)
@@ -49,7 +105,6 @@ function setGraph() {
     // .force('collision', d3.forceCollide().radius(d => maxRatings / 2))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-  let colors = d3.scaleOrdinal(d3.schemePaired);
   let circles = node.append("g");
   //circle for drama
   circles.filter(function(d) {
@@ -119,7 +174,10 @@ function setGraph() {
     .append("circle")
     .attr("r", maxRatings)
     .attr("fill", "#fff")
-    .attr("stroke", d => colors(d.id))
+    .attr("stroke", (d, i) => {
+      addLegend(d, i);
+      return colors(d.id);
+    })
     .attr("stroke-width", 5);
 
   d3.selectAll(".year-node")
