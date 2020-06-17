@@ -182,7 +182,8 @@ function setGraph() {
     });
 
   svg.call(tip);
-  node.on('mouseover', tip.show)
+  node.style("cursor", "pointer")
+    .on('mouseover', tip.show)
     .on('mouseout', tip.hide);
 
   //將模擬器綁定點、線
