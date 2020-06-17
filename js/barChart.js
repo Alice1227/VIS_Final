@@ -32,7 +32,10 @@ function setBarGraph(ratings) {
 
   d3.selectAll("#barChart svg g").remove();
 
-  let dramaNames = data_five.map(d => d.drama);
+  let formatDrama = d => {
+    return d.year + d.drama;
+  };
+  let dramaNames = data_five.map(d => formatDrama(d));
   x.domain(dramaNames);
   y.domain([0, d3.max(data_five, d => d[ratings])]);
 
@@ -79,7 +82,7 @@ function setBarGraph(ratings) {
     .enter()
     .append("rect")
     .attr("width", x.bandwidth())
-    .attr("x", d => x(d.drama))
+    .attr("x", d => x(formatDrama(d)))
     .style("fill", "#00b3bc")
     .attr("y", d => y(0))
     .attr("height", 0);
@@ -104,7 +107,7 @@ function setBarGraph(ratings) {
     .attr('text-anchor', 'middle')
     .attr('fill', '#fff')
     .attr('font-size', 10)
-    .attr("x", d => x(d.drama) + x.bandwidth() / 2)
+    .attr("x", d => x(formatDrama(d)) + x.bandwidth() / 2)
     .attr("y", d => y(0))
     .attr("display", "none")
     .text(d => d[ratings]);
@@ -164,20 +167,27 @@ function getLines(text, width) {
 function wrap(text, width) {
   text.each(function() {
     let text = d3.select(this),
-      words = text.text(),
+      year = text.text().slice(0, 4),
+      words = text.text().slice(4),
       lines = getLines(words, width),
       line = [],
-      lineHeight = 1.5,
+      lineHeight = 1.2,
       y = text.attr("y"),
       dy = parseFloat(text.attr("dy"));
 
     text.text('');
 
+    text.append("tspan")
+      .attr("x", 0)
+      .attr("y", y)
+      .attr("dy", dy + "em")
+      .text(year);
+
     lines.forEach(function(words, lineNumber) {
       text.append("tspan")
         .attr("x", 0)
         .attr("y", y)
-        .attr("dy", lineNumber * lineHeight + dy + "em")
+        .attr("dy", (lineNumber + 1) * lineHeight + dy + "em")
         .text(words);
     });
   });
